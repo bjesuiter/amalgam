@@ -1,11 +1,11 @@
 ---
 # amalgam-jcde
 title: Loading states and skeletons
-status: todo
+status: completed
 type: task
 priority: normal
 created_at: 2026-01-19T10:54:05Z
-updated_at: 2026-01-19T10:54:05Z
+updated_at: 2026-01-19T18:50:24Z
 parent: amalgam-u0rf
 ---
 
