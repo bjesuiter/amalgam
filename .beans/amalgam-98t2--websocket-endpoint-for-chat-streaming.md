@@ -4,8 +4,10 @@ title: WebSocket endpoint for chat streaming
 status: completed
 type: task
 priority: high
+tags:
+    - ai-verified
 created_at: 2026-01-19T10:53:33Z
-updated_at: 2026-01-19T14:58:57Z
+updated_at: 2026-01-19T15:15:27Z
 parent: amalgam-7u0f
 ---
 
@@ -41,3 +43,8 @@ WebSocket endpoint for real-time chat communication with OpenCode.
 - Test cases: connect, send message, receive response, cancel, disconnect
 - Mock ACP client for predictable responses
 - Test error scenarios (invalid chat ID, connection drops)
+
+## AI Verification Result (2026-01-19)
+**Status: PASSED**
+- ✅ Route file exists: app/routes/api/chats.$chatId.stream.ts
+- ✅ Chat UI has message input connected to WebSocket stream
