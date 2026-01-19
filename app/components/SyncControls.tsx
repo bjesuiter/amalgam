@@ -48,7 +48,7 @@ export function SyncControls({ workdirId, onSyncComplete }: SyncControlsProps) {
       if (!manifestResponse.ok) {
         throw new Error('Failed to fetch remote manifest')
       }
-      const { manifest: remoteManifest } = await manifestResponse.json() as { manifest: FileManifest[] }
+      const { files: remoteManifest } = await manifestResponse.json() as { files: FileManifest[] }
 
       const diff = computeDiff(localManifest, remoteManifest)
 
