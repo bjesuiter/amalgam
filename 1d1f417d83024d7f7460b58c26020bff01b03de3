@@ -1,0 +1,21 @@
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.34",
+  "base_commit_sha": "1d1f417d83024d7f7460b58c26020bff01b03de3",
+  "prompts": {
+    "2db4125a2f424b73": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_42a2bd37affe9HZ0JHO9b7UAAv",
+        "model": "anthropic/claude-opus-4-5"
+      },
+      "human_author": "Benjamin Jesuiter <bjesuiter@gmail.com>",
+      "messages": [],
+      "total_additions": 134,
+      "total_deletions": 0,
+      "accepted_lines": 134,
+      "overriden_lines": 0
+    }
+  }
+}
