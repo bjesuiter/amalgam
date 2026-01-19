@@ -30,3 +30,11 @@ Comprehensive error handling with user-friendly feedback.
 - Validation errors (form inputs)
 - Server errors (500s)
 - Not found errors (404s)
+
+## Verification
+- Use `agent-browser` skill to test UI error states
+- Verify: error boundary catches and displays errors
+- Verify: toast notifications appear for success/error actions
+- Verify: form validation shows inline errors
+- Write unit tests with `bun:test` for error parsing utilities
+- Simulate network errors to test offline handling

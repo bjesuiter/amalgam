@@ -24,3 +24,11 @@ Automatically sync files before starting a chat session.
 4. User can: Sync now, Skip, Cancel
 5. If syncing, upload changes then send message
 6. If skipping, send message with current remote state
+
+## Verification
+- Use `agent-browser` skill to test UI flow
+- Verify: sync dialog appears when changes detected
+- Verify: "Sync now" triggers upload then sends message
+- Verify: "Skip" sends message without upload
+- Verify: "Cancel" aborts message send
+- Write unit tests for change detection logic with `bun:test`

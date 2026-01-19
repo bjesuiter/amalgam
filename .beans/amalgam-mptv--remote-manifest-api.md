@@ -24,3 +24,9 @@ Server-side API to scan remote directory and return file manifest.
 ## Performance
 - Consider caching for large directories
 - Stream results for very large directories
+
+## Verification
+- Write integration tests with `bun:test`
+- Test cases: empty directory, nested files, ignore patterns respected
+- Create test directory structure for consistent results
+- Verify FileManifest format (path, size, mtime)

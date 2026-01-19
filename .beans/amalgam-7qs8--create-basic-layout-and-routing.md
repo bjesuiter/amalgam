@@ -28,3 +28,10 @@ Layout
 │   └── ChatList (when workdir selected)
 └── Main content area
 ```
+
+## Verification
+- Use `agent-browser` skill to test UI
+- Verify: index redirects to /workdirs
+- Verify: sidebar renders with correct structure
+- Verify: all routes are accessible and render content
+- Verify: layout responsive on different viewports

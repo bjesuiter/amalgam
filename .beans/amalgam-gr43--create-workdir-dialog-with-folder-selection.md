@@ -30,3 +30,12 @@ Dialog for creating new workdirs with local folder selection.
 5. POST to /api/workdirs
 6. Store handle in IndexedDB
 7. Navigate to new workdir detail page
+
+## Verification
+- Use `agent-browser` skill to test UI
+- Verify: dialog opens on button click
+- Verify: name input validates (required)
+- Verify: folder selection button triggers picker (manual test needed for actual picker)
+- Verify: submit disabled until both fields filled
+- Verify: success navigates to detail page
+- Note: Chrome File System API requires user gesture, may need manual validation

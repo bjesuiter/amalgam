@@ -24,3 +24,13 @@ Configure Progressive Web App manifest for installability.
 - background_color: TBD
 - display: standalone
 - start_url: /
+
+## Verification
+- Manual validation:
+  - `public/manifest.json` exists and is valid JSON
+  - Icons exist at specified paths
+  - Meta tags present in HTML head
+- Use `agent-browser` skill:
+  - Open Chrome DevTools → Application → Manifest
+  - Verify manifest loads without errors
+  - Check "Add to Home Screen" prompt available

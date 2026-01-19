@@ -30,3 +30,12 @@ User interface for chat interactions with streaming message display.
 - User messages: right-aligned, blue background
 - Assistant messages: left-aligned, gray background
 - Streaming indicator during response
+
+## Verification
+- Use `agent-browser` skill to test UI
+- Verify: chat page renders with header, messages, input
+- Verify: user can type and send messages
+- Verify: messages appear with correct styling (user vs assistant)
+- Verify: auto-scroll works on new messages
+- Verify: markdown renders correctly in assistant messages
+- Mock WebSocket for predictable test scenarios

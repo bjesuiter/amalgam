@@ -21,3 +21,9 @@ Build file manifest from local directory using Chrome FS API.
 ## Dependencies
 - Chrome File System API wrapper (amalgam-tdxb)
 - Ignore patterns (this milestone)
+
+## Verification
+- Write unit tests with `bun:test` using mocked FileSystemDirectoryHandle
+- Test cases: empty directory, nested files, ignored files filtered out
+- Verify FileManifest format (path, size, mtime)
+- Manual validation in browser with real directory for integration testing

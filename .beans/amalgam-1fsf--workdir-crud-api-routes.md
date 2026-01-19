@@ -24,3 +24,9 @@ Implement server-side API routes for workdir management.
 - POST creates remote directory at `/home/exedev/<userId>/<name>`
 - DELETE optionally removes remote directory
 - All routes require authentication (use auth middleware)
+
+## Verification
+- Write integration tests with `bun:test` for each endpoint
+- Test cases: list empty, create workdir, list with items, delete workdir
+- Mock auth headers in tests
+- Verify database state after each operation

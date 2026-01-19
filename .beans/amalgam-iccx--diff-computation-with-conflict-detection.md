@@ -37,3 +37,15 @@ interface ConflictInfo {
   remote: FileManifest;
 }
 ```
+
+## Verification
+- Write comprehensive unit tests with `bun:test`
+- Test cases:
+  - Empty manifests → no changes
+  - New file in local → newFiles
+  - File with different size → changedFiles
+  - File with different mtime → changedFiles
+  - File in remote only → deletedFiles
+  - Same file, same size/mtime → unchangedFiles
+  - File changed on both sides since lastSyncedAt → conflicts
+- This is pure logic, fully testable without browser APIs

@@ -40,3 +40,15 @@ CMD ["bun", "run", "start"]
 - Port: 3000
 - Persistent volume for /app/data (SQLite)
 - Environment: production
+
+## Verification
+- Manual validation:
+  - `docker build -t amalgam .` succeeds
+  - `docker run -p 3000:3000 amalgam` starts server
+  - `curl http://localhost:3000` returns expected response
+  - `curl http://localhost:3000/health` returns 200 (health check)
+  - Container size is reasonable (< 500MB)
+- Test volume persistence:
+  - Create data in container
+  - Stop and restart container with same volume
+  - Verify data persists

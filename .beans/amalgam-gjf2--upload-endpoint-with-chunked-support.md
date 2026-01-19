@@ -25,3 +25,9 @@ Server-side endpoint for uploading files to remote directory.
 - Client splits large files into chunks
 - Server reassembles on receipt
 - Consider resumable uploads for reliability
+
+## Verification
+- Write integration tests with `bun:test`
+- Test cases: single file upload, multiple files, large file chunked upload
+- Verify files written to correct paths
+- Test error handling for failed uploads

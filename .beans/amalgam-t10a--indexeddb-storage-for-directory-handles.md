@@ -30,3 +30,10 @@ interface WorkdirHandle {
 ## Notes
 - FileSystemDirectoryHandle cannot be serialized to JSON
 - Must use IndexedDB's structured clone algorithm
+
+## Verification
+- Write unit tests with `bun:test` using fake-indexeddb or similar mock
+- Test cases: store handle, retrieve handle, handle not found, update lastAccessedAt
+- Manual validation in browser for actual IndexedDB persistence:
+  - Store handle, close tab, reopen, verify handle retrieved
+  - Test permission re-request flow when handle invalid

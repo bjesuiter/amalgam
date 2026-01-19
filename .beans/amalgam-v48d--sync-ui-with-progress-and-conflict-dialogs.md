@@ -34,3 +34,12 @@ User interface for file sync operations including progress and conflict resoluti
 
 ## Download Flow
 Similar but reversed direction
+
+## Verification
+- Use `agent-browser` skill to test UI
+- Verify: Upload/Download buttons render and are clickable
+- Verify: progress indicator shows during sync
+- Verify: conflict dialog appears when conflicts exist
+- Verify: conflict resolution options work (Overwrite, Skip, Cancel)
+- Verify: toast notifications on success/error
+- Mock sync operations for predictable test scenarios

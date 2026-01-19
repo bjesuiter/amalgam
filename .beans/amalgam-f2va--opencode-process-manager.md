@@ -34,3 +34,14 @@ interface OpenCodeSession {
 - Spawn with `opencode --acp` flag
 - Set CWD to workdir remote path
 - Kill existing session before starting new one
+
+## Verification
+- Write unit tests with `bun:test`
+- Mock child_process.spawn for isolated testing
+- Test cases:
+  - startSession creates new session in Map
+  - startSession kills existing session first
+  - stopSession removes from Map and kills process
+  - getSession returns correct session or undefined
+  - Process exit event cleans up session
+- Integration test: actually spawn a simple process to verify lifecycle

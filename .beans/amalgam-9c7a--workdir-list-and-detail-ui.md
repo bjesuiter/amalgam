@@ -27,3 +27,11 @@ Build the UI for listing and viewing workdirs.
 ## Data Fetching
 - Use TanStack Query for data fetching
 - Optimistic updates for better UX
+
+## Verification
+- Use `agent-browser` skill to test UI
+- Verify: workdir list displays items correctly
+- Verify: workdir card shows name, sync date, actions
+- Verify: clicking card navigates to detail page
+- Verify: delete confirmation dialog works
+- Write component tests with `bun:test` + testing-library if applicable

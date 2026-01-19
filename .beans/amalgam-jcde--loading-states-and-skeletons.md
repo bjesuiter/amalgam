@@ -28,3 +28,10 @@ Add loading indicators and skeleton screens for better perceived performance.
 - Use skeletons for initial page loads
 - Use spinners for user-initiated actions
 - Avoid layout shift during loading
+
+## Verification
+- Use `agent-browser` skill to test UI
+- Verify: skeletons appear during initial page load
+- Verify: skeletons match layout of actual content (no layout shift)
+- Verify: spinners appear for user actions
+- Throttle network in dev tools to observe loading states

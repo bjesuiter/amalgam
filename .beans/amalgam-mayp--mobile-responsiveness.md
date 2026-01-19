@@ -28,3 +28,11 @@ Ensure the application works well on mobile devices.
 - Hamburger menu for sidebar
 - Full-screen chat on mobile
 - Swipe gestures (optional)
+
+## Verification
+- Use `agent-browser` skill with mobile viewport emulation
+- Verify: sidebar collapses to hamburger on mobile
+- Verify: touch targets are at least 44x44px
+- Verify: text is readable without zooming
+- Verify: chat input doesn't get hidden by keyboard
+- Test at breakpoints: 375px (iPhone), 768px (iPad), 1024px+ (desktop)

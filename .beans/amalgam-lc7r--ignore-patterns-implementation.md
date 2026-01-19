@@ -34,3 +34,13 @@ build/
 ## Future Enhancement
 - Per-workdir custom patterns (store in DB)
 - Respect .gitignore if present
+
+## Verification
+- Write comprehensive unit tests with `bun:test`
+- Test cases for each default pattern:
+  - `shouldIgnore('node_modules/foo.js')` → true
+  - `shouldIgnore('.git/config')` → true
+  - `shouldIgnore('src/app.ts')` → false
+  - `shouldIgnore('.env')` → true
+  - `shouldIgnore('.env.local')` → true
+  - `shouldIgnore('debug.log')` → true

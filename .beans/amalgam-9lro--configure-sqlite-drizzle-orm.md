@@ -44,3 +44,13 @@ export const chats = sqliteTable('chats', {
   status: text('status', { enum: ['idle', 'running', 'error'] }).notNull().default('idle'),
 });
 ```
+
+## Verification
+- Write unit tests with `bun:test` for database operations
+- Test cases:
+  - Create user, verify in database
+  - Create workdir with user reference
+  - Create chat with workdir reference
+  - Foreign key constraints enforced
+- Run `bun run db:migrate` and verify migration applies
+- Verify `data/amalgam.db` file created

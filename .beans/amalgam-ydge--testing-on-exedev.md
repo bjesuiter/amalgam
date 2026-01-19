@@ -33,3 +33,14 @@ End-to-end testing of the deployed application on exe.dev.
 - Measure initial load time
 - Measure sync time for typical project
 - Measure chat response latency
+
+## Verification
+- Use `agent-browser` skill for end-to-end testing on deployed app:
+  - Navigate to deployed URL
+  - Complete each test case in order
+  - Screenshot key states for documentation
+- Manual validation for tests requiring user gestures:
+  - Chrome File System API (directory selection)
+  - exe.dev authentication flow
+- Document all issues found with reproduction steps
+- If tests cannot be automated, create manual test checklist

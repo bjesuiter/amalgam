@@ -27,3 +27,14 @@ Implement service worker for offline app shell caching.
 - Keep simple - just cache shell
 - Don't cache API responses
 - Service worker updates on new deploy
+
+## Verification
+- Use `agent-browser` skill:
+  - Open DevTools → Application → Service Workers
+  - Verify service worker registered
+  - Go offline (DevTools → Network → Offline)
+  - Verify app shell still loads
+  - Verify offline indicator appears
+- Manual validation:
+  - Check cache storage contains expected assets
+  - Test service worker update flow

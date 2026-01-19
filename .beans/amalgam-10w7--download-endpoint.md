@@ -25,3 +25,9 @@ Server-side endpoint for downloading files from remote directory.
 - Zip streaming for multiple files
 - Direct file stream for single files
 - Consider archiver library for zip creation
+
+## Verification
+- Write integration tests with `bun:test`
+- Test cases: single file download, multiple files (zip), missing file handling
+- Verify correct Content-Type headers
+- Test with various file sizes

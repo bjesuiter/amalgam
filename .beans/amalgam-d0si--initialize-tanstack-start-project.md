@@ -20,3 +20,10 @@ Initialize a new TanStack Start project with React.
 ## References
 - See `docs/tanstack/start/` for TanStack Start documentation
 - Target structure: `app/routes/`, `app/components/`, `app/lib/`
+
+## Verification
+- Manual validation (setup task, no tests needed):
+  - `bun run dev` starts server without errors
+  - `curl http://localhost:3000` returns HTML
+  - `bun run typecheck` passes
+  - Directory structure matches target

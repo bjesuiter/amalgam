@@ -31,3 +31,12 @@ interface FileManifest {
 ## Notes
 - Chrome/Edge only (acceptable per design decisions)
 - Handle permission errors gracefully
+
+## Verification
+- Write unit tests with `bun:test` where possible (mock FileSystemDirectoryHandle)
+- Note: Chrome File System API requires browser context
+- Manual validation needed for actual file operations:
+  - Test selectDirectory opens picker
+  - Test readDirectoryRecursive returns correct manifest
+  - Test writeFile creates files and directories
+- Use `agent-browser` skill in Chrome to test actual API interactions

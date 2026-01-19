@@ -21,3 +21,9 @@ Create authentication middleware using exe.dev built-in auth headers.
 ## References
 - See `docs/exe/all.md` for exe.dev authentication details
 - See SPEC.md Authentication section for code example
+
+## Verification
+- Write unit tests with `bun:test`
+- Test cases: valid headers → user upserted, missing headers → redirect
+- Mock database for user upsert verification
+- Test context passing to downstream handlers

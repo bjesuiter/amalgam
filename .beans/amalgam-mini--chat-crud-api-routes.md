@@ -24,3 +24,9 @@ Server-side API routes for chat management.
 - POST creates chat with auto-generated UUID
 - DELETE kills associated OpenCode session first
 - All routes require authentication
+
+## Verification
+- Write integration tests with `bun:test`
+- Test cases: list chats, create chat, delete chat
+- Mock OpenCode session manager for delete tests
+- Verify database state after operations

@@ -20,3 +20,12 @@ Configure TailwindCSS and install shadcn/ui component library.
 ## Technical Notes
 - Use `bunx shadcn-ui@latest init`
 - Configure path aliases in tsconfig.json
+
+## Verification
+- Manual validation (setup task):
+  - Tailwind classes apply correctly (check with dev tools)
+  - shadcn/ui components render properly
+  - `bun run build` completes without CSS errors
+- Use `agent-browser` skill to visually verify:
+  - Button, Input, Dialog, Card components render correctly
+  - Theme colors apply as expected

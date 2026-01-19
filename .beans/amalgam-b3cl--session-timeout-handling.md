@@ -33,3 +33,13 @@ setInterval(() => {
   }
 }, 60 * 1000);
 ```
+
+## Verification
+- Write unit tests with `bun:test`
+- Use fake timers to control setInterval
+- Test cases:
+  - Session not timed out when active
+  - Session timed out after inactivity period
+  - lastActivityAt updates on message
+  - WebSocket notified on timeout
+- Test with shorter timeout values for faster test execution

@@ -34,3 +34,14 @@ Implement ACP (Agent Control Protocol) client for communicating with OpenCode.
 - `prompt/start` - Begin prompt turn
 - `prompt/response` - Receive response chunks
 - `tool/confirm` - Approve tool execution
+
+## Verification
+- Write unit tests with `bun:test`
+- Mock stdio streams for isolated testing
+- Test cases:
+  - Initialize session sends correct JSON-RPC message
+  - Prompt start/response parsing works correctly
+  - Tool call detection and confirmation flow
+  - Content type parsing (text, tool_use, tool_result)
+- Integration test with actual OpenCode process (if available in test environment)
+- Manual validation: send real prompts and verify responses

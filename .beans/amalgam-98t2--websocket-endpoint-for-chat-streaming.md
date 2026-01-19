@@ -35,3 +35,9 @@ WebSocket endpoint for real-time chat communication with OpenCode.
 - Start OpenCode session on first message if not running
 - Update chat lastActivityAt on each message
 - Forward ACP responses to WebSocket client
+
+## Verification
+- Write integration tests with `bun:test` using WebSocket client
+- Test cases: connect, send message, receive response, cancel, disconnect
+- Mock ACP client for predictable responses
+- Test error scenarios (invalid chat ID, connection drops)
