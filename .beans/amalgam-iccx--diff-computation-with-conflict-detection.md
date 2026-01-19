@@ -1,11 +1,11 @@
 ---
 # amalgam-iccx
 title: Diff computation with conflict detection
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-01-19T10:52:58Z
-updated_at: 2026-01-19T10:52:58Z
+updated_at: 2026-01-19T11:57:01Z
 parent: amalgam-azfj
 ---
 
