@@ -417,6 +417,26 @@ function ChatPage() {
     }
   }
 
+  const handleRenameChat = async (targetChatId: string, newTitle: string) => {
+    try {
+      const response = await fetch(`/api/chats/${targetChatId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: newTitle }),
+      })
+      
+      if (!response.ok) {
+        throw new Error('Failed to rename chat')
+      }
+      
+      setChats((prev) =>
+        prev.map((c) => (c.id === targetChatId ? { ...c, title: newTitle || null } : c))
+      )
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to rename chat')
+    }
+  }
+
   if (loading) {
     return (
       <Layout workdirs={[]}>
@@ -428,7 +448,7 @@ function ChatPage() {
   }
 
   return (
-    <Layout workdirs={workdirs} chats={chats}>
+    <Layout workdirs={workdirs} chats={chats} onRenameChat={handleRenameChat}>
       <div className="flex h-full">
         <div className="flex flex-1 flex-col">
           <header className="flex h-14 items-center justify-between border-b px-4">

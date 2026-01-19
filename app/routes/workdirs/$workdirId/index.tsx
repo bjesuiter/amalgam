@@ -125,6 +125,26 @@ function WorkdirDetailPage() {
     }
   }
 
+  const handleRenameChat = async (chatId: string, newTitle: string) => {
+    try {
+      const response = await fetch(`/api/chats/${chatId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: newTitle }),
+      })
+      
+      if (!response.ok) {
+        throw new Error('Failed to rename chat')
+      }
+      
+      setChats((prev) =>
+        prev.map((c) => (c.id === chatId ? { ...c, title: newTitle || null } : c))
+      )
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to rename chat')
+    }
+  }
+
   if (loading) {
     return (
       <Layout workdirs={[]}>
@@ -164,7 +184,7 @@ function WorkdirDetailPage() {
   }
 
   return (
-    <Layout workdirs={workdirs} chats={chats}>
+    <Layout workdirs={workdirs} chats={chats} onRenameChat={handleRenameChat}>
       <div className="p-6">
         <div className="mb-6 flex items-center justify-between">
           <div>

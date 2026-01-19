@@ -1,8 +1,15 @@
 import { Link, useParams } from '@tanstack/react-router'
 import { cn } from '~/lib/utils'
-import { FolderOpen, MessageSquare, ChevronLeft, ChevronRight, Plus, X } from 'lucide-react'
+import { FolderOpen, MessageSquare, ChevronLeft, ChevronRight, Plus, X, Pencil, Check } from 'lucide-react'
 import { Button } from '~/components/ui/button'
-import { useState } from 'react'
+import { Input } from '~/components/ui/input'
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from '~/components/ui/context-menu'
+import { useState, useRef } from 'react'
 
 interface Workdir {
   id: string
@@ -20,16 +27,48 @@ interface SidebarProps {
   className?: string
   isOpen?: boolean
   onClose?: () => void
+  onRenameChat?: (chatId: string, newTitle: string) => Promise<void>
 }
 
-export function Sidebar({ workdirs, chats, className, isOpen = false, onClose }: SidebarProps) {
+export function Sidebar({ workdirs, chats, className, isOpen = false, onClose, onRenameChat }: SidebarProps) {
   const [collapsed, setCollapsed] = useState(false)
+  const [editingChatId, setEditingChatId] = useState<string | null>(null)
+  const [editValue, setEditValue] = useState('')
+  const editInputRef = useRef<HTMLInputElement>(null)
   const params = useParams({ strict: false })
   const workdirId = params.workdirId as string | undefined
   const chatId = params.chatId as string | undefined
 
   const handleLinkClick = () => {
     onClose?.()
+  }
+
+  const startEditing = (chat: Chat) => {
+    setEditingChatId(chat.id)
+    setEditValue(chat.title || '')
+    setTimeout(() => editInputRef.current?.focus(), 0)
+  }
+
+  const cancelEditing = () => {
+    setEditingChatId(null)
+    setEditValue('')
+  }
+
+  const saveEdit = async () => {
+    if (editingChatId && onRenameChat) {
+      await onRenameChat(editingChatId, editValue.trim())
+    }
+    setEditingChatId(null)
+    setEditValue('')
+  }
+
+  const handleEditKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      saveEdit()
+    } else if (e.key === 'Escape') {
+      cancelEditing()
+    }
   }
 
   return (
@@ -104,19 +143,67 @@ export function Sidebar({ workdirs, chats, className, isOpen = false, onClose }:
             </div>
             <nav className="space-y-1">
               {chats.map((chat) => (
-                <Link
-                  key={chat.id}
-                  to="/workdirs/$workdirId/chats/$chatId"
-                  params={{ workdirId, chatId: chat.id }}
-                  onClick={handleLinkClick}
-                  className={cn(
-                    'flex items-center gap-2 rounded-md px-2 py-2.5 text-sm transition-colors hover:bg-muted md:py-1.5',
-                    chatId === chat.id && 'bg-muted font-medium'
-                  )}
-                >
-                  <MessageSquare className="h-4 w-4 shrink-0" />
-                  {(!collapsed || isOpen) && <span className="truncate">{chat.title || 'New Chat'}</span>}
-                </Link>
+                editingChatId === chat.id ? (
+                  <div
+                    key={chat.id}
+                    className="flex items-center gap-1 rounded-md px-2 py-1"
+                  >
+                    <MessageSquare className="h-4 w-4 shrink-0" />
+                    {(!collapsed || isOpen) && (
+                      <>
+                        <Input
+                          ref={editInputRef}
+                          value={editValue}
+                          onChange={(e) => setEditValue(e.target.value)}
+                          onKeyDown={handleEditKeyDown}
+                          onBlur={saveEdit}
+                          className="h-7 flex-1 text-sm"
+                          placeholder="Chat title..."
+                        />
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6 shrink-0"
+                          onClick={saveEdit}
+                        >
+                          <Check className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-6 w-6 shrink-0"
+                          onMouseDown={(e) => e.preventDefault()}
+                          onClick={cancelEditing}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                ) : (
+                  <ContextMenu key={chat.id}>
+                    <ContextMenuTrigger asChild>
+                      <Link
+                        to="/workdirs/$workdirId/chats/$chatId"
+                        params={{ workdirId, chatId: chat.id }}
+                        onClick={handleLinkClick}
+                        className={cn(
+                          'flex items-center gap-2 rounded-md px-2 py-2.5 text-sm transition-colors hover:bg-muted md:py-1.5',
+                          chatId === chat.id && 'bg-muted font-medium'
+                        )}
+                      >
+                        <MessageSquare className="h-4 w-4 shrink-0" />
+                        {(!collapsed || isOpen) && <span className="truncate">{chat.title || 'New Chat'}</span>}
+                      </Link>
+                    </ContextMenuTrigger>
+                    <ContextMenuContent>
+                      <ContextMenuItem onClick={() => startEditing(chat)}>
+                        <Pencil className="mr-2 h-4 w-4" />
+                        Rename
+                      </ContextMenuItem>
+                    </ContextMenuContent>
+                  </ContextMenu>
+                )
               ))}
               {chats.length === 0 && (!collapsed || isOpen) && (
                 <p className="px-2 py-4 text-sm text-muted-foreground">No chats yet</p>

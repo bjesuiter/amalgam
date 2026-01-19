@@ -18,9 +18,10 @@ interface LayoutProps {
   children: ReactNode
   workdirs?: Workdir[]
   chats?: Chat[]
+  onRenameChat?: (chatId: string, newTitle: string) => Promise<void>
 }
 
-export function Layout({ children, workdirs = [], chats }: LayoutProps) {
+export function Layout({ children, workdirs = [], chats, onRenameChat }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const closeSidebar = useCallback(() => {
@@ -41,6 +42,7 @@ export function Layout({ children, workdirs = [], chats }: LayoutProps) {
         chats={chats}
         isOpen={sidebarOpen}
         onClose={closeSidebar}
+        onRenameChat={onRenameChat}
       />
 
       <main className="flex flex-1 flex-col overflow-y-auto">
