@@ -44,3 +44,9 @@ Get the most important ticket from your perspective from beans and work on it. W
 If you realize you need to do another thing, create a new ticket for this. 
 When you finish a ticket successfully, mark the ticket as done in beans and Commit and Push afterwards. 
 You're done when all tickets are implemented.
+
+## Integration Testing Ralph-Loop 
+Now look at the served website at http://localhost:3000 via playwrigher. 
+Test every ticket in beans, which is marked as done and validate it as a user would. 
+If the test works, add this result to the ticket. 
+If it does not, create a new ticket in beans as a bug for later inspection and go on to test the next ticket.
