@@ -1,11 +1,11 @@
 ---
 # amalgam-x0od
 title: Debug Sidebar for ACP Commands
-status: todo
+status: completed
 type: feature
 priority: normal
 created_at: 2026-01-19T15:57:46Z
-updated_at: 2026-01-19T15:57:46Z
+updated_at: 2026-01-19T19:13:51Z
 ---
 
 Add a debug sidebar on the right side of the chat window that displays ACP protocol traffic and session information for debugging purposes.
@@ -75,11 +75,11 @@ Modify `app/routes/workdirs/$workdirId/chats/$chatId.tsx`:
 
 ## Checklist
 
-- [ ] Create `app/lib/devMode.ts` with isDevMode() helper
-- [ ] Create debug event types in `app/server/opencode/chat.ts`
-- [ ] Add ACP request/response logging to `app/server/opencode/acp.ts`
-- [ ] Create `app/components/DebugSidebar.tsx` component
-- [ ] Add debug data state management in chat page
-- [ ] Update chat page layout for right sidebar
-- [ ] Style the sidebar with appropriate colors and scrolling
-- [ ] Test that sidebar auto-opens in dev, stays closed in prod
+- [x] Create `app/lib/devMode.ts` with isDevMode() helper
+- [x] Create debug event types in `app/server/opencode/chat.ts`
+- [x] Add ACP request/response logging to `app/server/opencode/acp.ts`
+- [x] Create `app/components/DebugSidebar.tsx` component
+- [x] Add debug data state management in chat page
+- [x] Update chat page layout for right sidebar
+- [x] Style the sidebar with appropriate colors and scrolling
+- [x] Test that sidebar auto-opens in dev, stays closed in prod

@@ -93,10 +93,21 @@ export interface SessionUpdate {
   }
 }
 
+export interface DebugLogEntry {
+  id: number
+  timestamp: Date
+  method: string
+  params?: unknown
+  result?: unknown
+  error?: { code: number; message: string; data?: unknown }
+  direction: 'sent' | 'received'
+}
+
 export interface ACPClientEvents {
   update: (update: SessionUpdate) => void
   error: (error: Error) => void
   close: () => void
+  debugLog: (entry: DebugLogEntry) => void
 }
 
 export class ACPClient extends EventEmitter {
@@ -104,7 +115,7 @@ export class ACPClient extends EventEmitter {
   private requestId = 0
   private pendingRequests = new Map<
     number,
-    { resolve: (value: unknown) => void; reject: (error: Error) => void }
+    { resolve: (value: unknown) => void; reject: (error: Error) => void; method: string }
   >()
   private buffer = ''
   private initialized = false
@@ -147,6 +158,16 @@ export class ACPClient extends EventEmitter {
       const pending = this.pendingRequests.get(message.id)
       if (pending) {
         this.pendingRequests.delete(message.id)
+        
+        this.emit('debugLog', {
+          id: message.id,
+          timestamp: new Date(),
+          method: pending.method,
+          result: message.result,
+          error: message.error,
+          direction: 'received' as const,
+        })
+        
         if (message.error) {
           pending.reject(new Error(message.error.message))
         } else {
@@ -173,7 +194,17 @@ export class ACPClient extends EventEmitter {
       this.pendingRequests.set(id, {
         resolve: resolve as (value: unknown) => void,
         reject,
+        method,
       })
+      
+      this.emit('debugLog', {
+        id,
+        timestamp: new Date(),
+        method,
+        params,
+        direction: 'sent' as const,
+      })
+      
       this.send({ jsonrpc: '2.0', id, method, params: params as Record<string, unknown> })
     })
   }

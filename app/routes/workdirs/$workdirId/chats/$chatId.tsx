@@ -5,13 +5,15 @@ import { ChatInput } from '~/components/ChatInput'
 import { Button } from '~/components/ui/button'
 import { ConfirmDialog } from '~/components/ConfirmDialog'
 import { SyncRequiredDialog } from '~/components/SyncRequiredDialog'
+import { DebugSidebar, type DebugLogEntry, type SessionInfo } from '~/components/DebugSidebar'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { cn } from '~/lib/utils'
-import { Trash2 } from 'lucide-react'
+import { Trash2, Bug } from 'lucide-react'
 import { useSyncCheck, type SyncCheckResult } from '~/lib/useSyncCheck'
 import { getWorkdirHandle } from '~/lib/fs-storage'
 import { buildLocalManifest, computeDiff, type FileManifest } from '~/lib/sync'
 import { readFile } from '~/lib/fs-api'
+import { isDevMode } from '~/lib/devMode'
 
 export const Route = createFileRoute('/workdirs/$workdirId/chats/$chatId')({
   component: ChatPage,
@@ -32,10 +34,19 @@ interface Chat {
 type ChatStatus = 'idle' | 'running' | 'error' | 'connecting'
 
 interface ChatEvent {
-  type: 'output' | 'status' | 'error'
+  type: 'output' | 'status' | 'error' | 'debug_request' | 'debug_response' | 'debug_session_info'
   content?: string
   status?: 'idle' | 'running' | 'error'
   message?: string
+  id?: string
+  timestamp?: string
+  method?: string
+  params?: unknown
+  result?: unknown
+  error?: { code: number; message: string; data?: unknown }
+  pid?: number
+  acpSessionId?: string
+  workdir?: string
 }
 
 function ChatPage() {
@@ -55,6 +66,12 @@ function ChatPage() {
   const [pendingMessage, setPendingMessage] = useState<string | null>(null)
   const [syncing, setSyncing] = useState(false)
   const [hasCheckedSync, setHasCheckedSync] = useState(false)
+  
+  const [debugSidebarOpen, setDebugSidebarOpen] = useState(isDevMode())
+  const [debugLogs, setDebugLogs] = useState<DebugLogEntry[]>([])
+  const [sessionInfo, setSessionInfo] = useState<SessionInfo>({
+    connectionStatus: 'connecting',
+  })
 
   const { checkSync, checking: checkingSync } = useSyncCheck(workdirId)
 
@@ -116,6 +133,10 @@ function ChatPage() {
 
         if (data.type === 'status') {
           setStatus(data.status || 'idle')
+          setSessionInfo((prev) => ({
+            ...prev,
+            connectionStatus: data.status === 'error' ? 'disconnected' : 'connected',
+          }))
 
           if (data.status === 'idle' && currentAssistantMessageRef.current) {
             setMessages((prev) => {
@@ -156,6 +177,36 @@ function ChatPage() {
           })
         } else if (data.type === 'error') {
           setError(data.message || 'An error occurred')
+        } else if (data.type === 'debug_request' && data.method) {
+          setDebugLogs((prev) => [
+            ...prev.slice(-99),
+            {
+              id: `req-${data.id}-${Date.now()}`,
+              timestamp: new Date(data.timestamp || Date.now()),
+              direction: 'sent',
+              method: data.method!,
+              payload: data.params,
+            },
+          ])
+        } else if (data.type === 'debug_response' && data.method) {
+          setDebugLogs((prev) => [
+            ...prev.slice(-99),
+            {
+              id: `res-${data.id}-${Date.now()}`,
+              timestamp: new Date(data.timestamp || Date.now()),
+              direction: 'received',
+              method: data.method!,
+              payload: data.error || data.result,
+              isError: !!data.error,
+            },
+          ])
+        } else if (data.type === 'debug_session_info') {
+          setSessionInfo((prev) => ({
+            ...prev,
+            pid: data.pid,
+            acpSessionId: data.acpSessionId,
+            workdir: data.workdir,
+          }))
         }
       } catch {
       }
@@ -325,63 +376,87 @@ function ChatPage() {
 
   return (
     <Layout workdirs={workdirs} chats={chats}>
-      <div className="flex h-full flex-col">
-        <header className="flex h-14 items-center justify-between border-b px-4">
-          <div className="flex items-center gap-2">
-            <h1 className="font-semibold">{chat?.title || 'New Chat'}</h1>
-            <span
-              className={cn(
-                'rounded-full px-2 py-0.5 text-xs',
-                status === 'running' && 'bg-green-500/20 text-green-600',
-                status === 'idle' && 'bg-muted text-muted-foreground',
-                status === 'error' && 'bg-destructive/20 text-destructive',
-                status === 'connecting' && 'bg-yellow-500/20 text-yellow-600'
+      <div className="flex h-full">
+        <div className="flex flex-1 flex-col">
+          <header className="flex h-14 items-center justify-between border-b px-4">
+            <div className="flex items-center gap-2">
+              <h1 className="font-semibold">{chat?.title || 'New Chat'}</h1>
+              <span
+                className={cn(
+                  'rounded-full px-2 py-0.5 text-xs',
+                  status === 'running' && 'bg-green-500/20 text-green-600',
+                  status === 'idle' && 'bg-muted text-muted-foreground',
+                  status === 'error' && 'bg-destructive/20 text-destructive',
+                  status === 'connecting' && 'bg-yellow-500/20 text-yellow-600'
+                )}
+              >
+                {status === 'running' && 'Running'}
+                {status === 'idle' && 'Idle'}
+                {status === 'error' && 'Error'}
+                {status === 'connecting' && 'Connecting...'}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              {isDevMode() && (
+                <Button
+                  variant={debugSidebarOpen ? 'default' : 'outline'}
+                  size="icon"
+                  onClick={() => setDebugSidebarOpen(!debugSidebarOpen)}
+                  title="Toggle Debug Panel"
+                >
+                  <Bug className="h-4 w-4" />
+                </Button>
               )}
-            >
-              {status === 'running' && 'Running'}
-              {status === 'idle' && 'Idle'}
-              {status === 'error' && 'Error'}
-              {status === 'connecting' && 'Connecting...'}
-            </span>
-          </div>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setDeleteDialogOpen(true)}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        </header>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => setDeleteDialogOpen(true)}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
+          </header>
 
-        <div className="flex-1 overflow-y-auto p-4">
-          <div className="mx-auto max-w-3xl space-y-4">
-            {messages.length === 0 && (
-              <div className="flex h-full items-center justify-center py-20">
-                <p className="text-muted-foreground">
-                  Send a message to start the conversation
-                </p>
-              </div>
-            )}
-            {messages.map((message) => (
-              <ChatMessage key={message.id} message={message} />
-            ))}
-            {error && (
-              <div className="rounded-md bg-destructive/10 px-4 py-2 text-sm text-destructive">
-                {error}
-              </div>
-            )}
-            <div ref={messagesEndRef} />
+          <div className="flex-1 overflow-y-auto p-4">
+            <div className="mx-auto max-w-3xl space-y-4">
+              {messages.length === 0 && (
+                <div className="flex h-full items-center justify-center py-20">
+                  <p className="text-muted-foreground">
+                    Send a message to start the conversation
+                  </p>
+                </div>
+              )}
+              {messages.map((message) => (
+                <ChatMessage key={message.id} message={message} />
+              ))}
+              {error && (
+                <div className="rounded-md bg-destructive/10 px-4 py-2 text-sm text-destructive">
+                  {error}
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+          </div>
+
+          <div className="border-t p-4">
+            <ChatInput
+              onSend={handleSend}
+              onCancel={handleCancel}
+              isRunning={status === 'running'}
+              disabled={status === 'connecting' || status === 'error'}
+            />
           </div>
         </div>
 
-        <div className="border-t p-4">
-          <ChatInput
-            onSend={handleSend}
-            onCancel={handleCancel}
-            isRunning={status === 'running'}
-            disabled={status === 'connecting' || status === 'error'}
+        {isDevMode() && (
+          <DebugSidebar
+            isOpen={debugSidebarOpen}
+            onToggle={() => setDebugSidebarOpen(!debugSidebarOpen)}
+            sessionInfo={sessionInfo}
+            logs={debugLogs}
+            onClearLogs={() => setDebugLogs([])}
           />
-        </div>
+        )}
       </div>
 
       <ConfirmDialog

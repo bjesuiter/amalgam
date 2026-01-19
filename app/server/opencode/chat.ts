@@ -7,7 +7,7 @@ import {
   setSessionTimeoutCallback,
   startSessionCleanup,
 } from './manager'
-import { ACPClient, createACPClient, type SessionUpdate } from './acp'
+import { ACPClient, createACPClient, type SessionUpdate, type DebugLogEntry } from './acp'
 
 export interface ChatConnection {
   chatId: string
@@ -17,7 +17,7 @@ export interface ChatConnection {
   status: 'idle' | 'running' | 'error'
 }
 
-export type ChatEventType = 'output' | 'status' | 'error' | 'timeout'
+export type ChatEventType = 'output' | 'status' | 'error' | 'timeout' | 'debug_request' | 'debug_response' | 'debug_session_info'
 
 export interface ChatOutputEvent {
   type: 'output'
@@ -39,7 +39,38 @@ export interface ChatTimeoutEvent {
   message: string
 }
 
-export type ChatEvent = ChatOutputEvent | ChatStatusEvent | ChatErrorEvent | ChatTimeoutEvent
+export interface DebugRequestEvent {
+  type: 'debug_request'
+  id: string
+  timestamp: string
+  method: string
+  params?: unknown
+}
+
+export interface DebugResponseEvent {
+  type: 'debug_response'
+  id: string
+  timestamp: string
+  method: string
+  result?: unknown
+  error?: { code: number; message: string; data?: unknown }
+}
+
+export interface DebugSessionInfoEvent {
+  type: 'debug_session_info'
+  pid?: number
+  acpSessionId?: string
+  workdir?: string
+}
+
+export type ChatEvent = 
+  | ChatOutputEvent 
+  | ChatStatusEvent 
+  | ChatErrorEvent 
+  | ChatTimeoutEvent
+  | DebugRequestEvent
+  | DebugResponseEvent
+  | DebugSessionInfoEvent
 
 const connections = new Map<string, ChatConnection>()
 const eventEmitters = new Map<string, EventEmitter>()
@@ -113,6 +144,27 @@ export async function ensureConnection(chatId: string, workdir: string): Promise
     emitChatEvent(chatId, { type: 'status', status: 'idle' })
   })
 
+  acpClient.on('debugLog', (entry: DebugLogEntry) => {
+    if (entry.direction === 'sent') {
+      emitChatEvent(chatId, {
+        type: 'debug_request',
+        id: String(entry.id),
+        timestamp: entry.timestamp.toISOString(),
+        method: entry.method,
+        params: entry.params,
+      })
+    } else {
+      emitChatEvent(chatId, {
+        type: 'debug_response',
+        id: String(entry.id),
+        timestamp: entry.timestamp.toISOString(),
+        method: entry.method,
+        result: entry.result,
+        error: entry.error,
+      })
+    }
+  })
+
   connection = {
     chatId,
     workdir,
@@ -128,6 +180,13 @@ export async function ensureConnection(chatId: string, workdir: string): Promise
     const acpSessionId = await acpClient.createSession(workdir)
     connection.acpSessionId = acpSessionId
     emitChatEvent(chatId, { type: 'status', status: 'idle' })
+    
+    emitChatEvent(chatId, {
+      type: 'debug_session_info',
+      pid: session.process.pid,
+      acpSessionId,
+      workdir,
+    })
   } catch (err) {
     connection.status = 'error'
     emitChatEvent(chatId, { type: 'error', message: (err as Error).message })

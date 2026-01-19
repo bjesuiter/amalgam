@@ -1,11 +1,11 @@
 ---
 # amalgam-o0wc
 title: Debug Sidebar Toggle Button
-status: todo
+status: completed
 type: task
 priority: normal
 created_at: 2026-01-19T15:57:58Z
-updated_at: 2026-01-19T15:58:01Z
+updated_at: 2026-01-19T19:13:51Z
 parent: amalgam-x0od
 ---
 
@@ -41,9 +41,9 @@ The debug sidebar (see parent feature) needs a toggle button in this header.
 
 ## Checklist
 
-- [ ] Add Bug icon import from lucide-react
-- [ ] Add debugSidebarOpen state to chat page
-- [ ] Add toggle button next to delete button (conditionally in dev mode)
-- [ ] Wire up onClick to toggle state
-- [ ] Pass open state to DebugSidebar component
-- [ ] Add visual feedback for open/closed state
+- [x] Add Bug icon import from lucide-react
+- [x] Add debugSidebarOpen state to chat page
+- [x] Add toggle button next to delete button (conditionally in dev mode)
+- [x] Wire up onClick to toggle state
+- [x] Pass open state to DebugSidebar component
+- [x] Add visual feedback for open/closed state
