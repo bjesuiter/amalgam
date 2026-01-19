@@ -1,12 +1,6 @@
+import { useRef, useEffect } from 'react'
+import { X } from 'lucide-react'
 import { Button } from '~/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '~/components/ui/dialog'
 import type { FileManifest } from '~/lib/sync'
 
 interface ConflictDialogProps {
@@ -26,24 +20,61 @@ export function ConflictDialog({
   conflicts,
   onResolve,
 }: ConflictDialogProps) {
-  const handleOpenChange = (nextOpen: boolean) => {
-    if (!nextOpen) {
-      onResolve('cancel')
+  const dialogRef = useRef<HTMLDialogElement>(null)
+
+  useEffect(() => {
+    const dialog = dialogRef.current
+    if (!dialog) return
+
+    if (open) {
+      dialog.showModal()
+    } else {
+      dialog.close()
     }
-    onOpenChange(nextOpen)
+  }, [open])
+
+  useEffect(() => {
+    const dialog = dialogRef.current
+    if (!dialog) return
+
+    const handleClose = () => {
+      onResolve('cancel')
+      onOpenChange(false)
+    }
+
+    dialog.addEventListener('close', handleClose)
+    return () => dialog.removeEventListener('close', handleClose)
+  }, [onOpenChange, onResolve])
+
+  const handleResolve = (resolution: 'overwrite' | 'skip' | 'cancel') => {
+    onResolve(resolution)
+    onOpenChange(false)
   }
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-lg">
-        <DialogHeader>
-          <DialogTitle>Sync Conflicts Detected</DialogTitle>
-          <DialogDescription>
-            {conflicts.length} file{conflicts.length !== 1 ? 's have' : ' has'} been modified both
-            locally and remotely since the last sync.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="max-h-64 overflow-y-auto">
+    <dialog
+      ref={dialogRef}
+      className="w-full max-w-lg rounded-lg border bg-background p-0 shadow-lg backdrop:bg-black/50"
+    >
+      <div className="p-6">
+        <div className="mb-4 flex items-start justify-between">
+          <div>
+            <h2 className="text-lg font-semibold">Sync Conflicts Detected</h2>
+            <p className="text-sm text-muted-foreground">
+              {conflicts.length} file{conflicts.length !== 1 ? 's have' : ' has'} been modified both
+              locally and remotely since the last sync.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => handleResolve('cancel')}
+            className="rounded-sm opacity-70 transition-opacity hover:opacity-100"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="mb-4 max-h-64 overflow-y-auto">
           <div className="space-y-3">
             {conflicts.map((conflict) => (
               <div
@@ -67,36 +98,19 @@ export function ConflictDialog({
             ))}
           </div>
         </div>
-        <DialogFooter className="flex-col gap-2 sm:flex-row">
-          <Button
-            variant="outline"
-            onClick={() => {
-              onResolve('cancel')
-              onOpenChange(false)
-            }}
-          >
+
+        <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
+          <Button variant="outline" onClick={() => handleResolve('cancel')}>
             Cancel
           </Button>
-          <Button
-            variant="outline"
-            onClick={() => {
-              onResolve('skip')
-              onOpenChange(false)
-            }}
-          >
+          <Button variant="outline" onClick={() => handleResolve('skip')}>
             Skip Conflicts
           </Button>
-          <Button
-            variant="destructive"
-            onClick={() => {
-              onResolve('overwrite')
-              onOpenChange(false)
-            }}
-          >
+          <Button variant="destructive" onClick={() => handleResolve('overwrite')}>
             Overwrite Remote
           </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </div>
+      </div>
+    </dialog>
   )
 }

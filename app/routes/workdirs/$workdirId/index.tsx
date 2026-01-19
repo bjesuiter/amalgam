@@ -3,14 +3,7 @@ import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { Layout } from '~/components/Layout'
 import { Button } from '~/components/ui/button'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '~/components/ui/card'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '~/components/ui/dialog'
+import { ConfirmDialog } from '~/components/ConfirmDialog'
 import { FolderSync, MessageSquare, Plus, Trash2 } from 'lucide-react'
 import { removeWorkdirHandle } from '~/lib/fs-storage'
 import { SyncControls } from '~/components/SyncControls'
@@ -225,25 +218,16 @@ function WorkdirDetailPage() {
         )}
       </div>
 
-      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Delete Workdir</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete "{workdir.name}"? This action cannot be undone.
-              All chats associated with this workdir will also be deleted.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)} disabled={deleting}>
-              Cancel
-            </Button>
-            <Button variant="destructive" onClick={handleDelete} disabled={deleting}>
-              {deleting ? 'Deleting...' : 'Delete'}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <ConfirmDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        title="Delete Workdir"
+        description={`Are you sure you want to delete "${workdir.name}"? This action cannot be undone. All chats associated with this workdir will also be deleted.`}
+        confirmLabel="Delete"
+        variant="destructive"
+        loading={deleting}
+        onConfirm={handleDelete}
+      />
     </Layout>
   )
 }
