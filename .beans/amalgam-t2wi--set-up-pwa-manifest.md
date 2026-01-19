@@ -1,11 +1,11 @@
 ---
 # amalgam-t2wi
 title: Set up PWA manifest
-status: todo
+status: completed
 type: task
 priority: normal
 created_at: 2026-01-19T10:52:01Z
-updated_at: 2026-01-19T10:52:01Z
+updated_at: 2026-01-19T18:35:52Z
 parent: amalgam-5gne
 ---
 

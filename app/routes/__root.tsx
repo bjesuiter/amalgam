@@ -21,8 +21,33 @@ export const Route = createRootRoute({
       {
         title: 'Amalgam',
       },
+      {
+        name: 'description',
+        content: 'AI coding assistant bridging local filesystems with cloud-hosted AI',
+      },
+      {
+        name: 'theme-color',
+        content: '#0a0a0a',
+      },
+      {
+        name: 'mobile-web-app-capable',
+        content: 'yes',
+      },
+      {
+        name: 'apple-mobile-web-app-capable',
+        content: 'yes',
+      },
+      {
+        name: 'apple-mobile-web-app-status-bar-style',
+        content: 'black-translucent',
+      },
     ],
-    links: [{ rel: 'stylesheet', href: globalsCss }],
+    links: [
+      { rel: 'stylesheet', href: globalsCss },
+      { rel: 'manifest', href: '/manifest.json' },
+      { rel: 'icon', type: 'image/png', sizes: '192x192', href: '/icons/icon-192.png' },
+      { rel: 'apple-touch-icon', href: '/icons/icon-192.png' },
+    ],
   }),
   component: RootComponent,
 })
