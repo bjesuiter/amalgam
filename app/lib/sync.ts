@@ -1,3 +1,6 @@
+import { readDirectoryRecursive } from './fs-api'
+import { shouldIgnore } from './ignore'
+
 export interface FileManifest {
   path: string
   size: number
@@ -70,4 +73,14 @@ export function computeDiff(
     deletedFiles,
     conflicts,
   }
+}
+
+export async function buildLocalManifest(
+  handle: FileSystemDirectoryHandle,
+  customIgnorePatterns: string[] = []
+): Promise<FileManifest[]> {
+  return readDirectoryRecursive(
+    handle,
+    (path) => shouldIgnore(path, customIgnorePatterns)
+  )
 }

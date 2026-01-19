@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { Layout } from '~/components/Layout'
 import { Button } from '~/components/ui/button'
@@ -11,8 +11,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '~/components/ui/dialog'
-import { FolderSync, MessageSquare, Plus, Trash2, Upload, Download } from 'lucide-react'
+import { FolderSync, MessageSquare, Plus, Trash2 } from 'lucide-react'
 import { removeWorkdirHandle } from '~/lib/fs-storage'
+import { SyncControls } from '~/components/SyncControls'
 
 export const Route = createFileRoute('/workdirs/$workdirId/')({
   component: WorkdirDetailPage,
@@ -43,36 +44,36 @@ function WorkdirDetailPage() {
 
   const workdir = workdirs.find((w) => w.id === workdirId)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [workdirsResponse, chatsResponse] = await Promise.all([
-          fetch('/api/workdirs'),
-          fetch(`/api/workdirs/${workdirId}/chats`),
-        ])
+  const fetchData = useCallback(async () => {
+    try {
+      const [workdirsResponse, chatsResponse] = await Promise.all([
+        fetch('/api/workdirs'),
+        fetch(`/api/workdirs/${workdirId}/chats`),
+      ])
 
-        if (!workdirsResponse.ok) {
-          throw new Error('Failed to fetch workdirs')
-        }
-        if (!chatsResponse.ok) {
-          throw new Error('Failed to fetch chats')
-        }
-
-        const workdirsData = await workdirsResponse.json()
-        const chatsData = await chatsResponse.json()
-
-        setWorkdirs(workdirsData.workdirs)
-        setChats(chatsData.chats)
-        setError(null)
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred')
-      } finally {
-        setLoading(false)
+      if (!workdirsResponse.ok) {
+        throw new Error('Failed to fetch workdirs')
       }
-    }
+      if (!chatsResponse.ok) {
+        throw new Error('Failed to fetch chats')
+      }
 
-    fetchData()
+      const workdirsData = await workdirsResponse.json()
+      const chatsData = await chatsResponse.json()
+
+      setWorkdirs(workdirsData.workdirs)
+      setChats(chatsData.chats)
+      setError(null)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred')
+    } finally {
+      setLoading(false)
+    }
   }, [workdirId])
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
 
   const handleDelete = async () => {
     setDeleting(true)
@@ -180,15 +181,8 @@ function WorkdirDetailPage() {
                 Manage file synchronization between local and remote
               </CardDescription>
             </CardHeader>
-            <CardContent className="flex gap-2">
-              <Button variant="outline">
-                <Upload className="mr-2 h-4 w-4" />
-                Upload
-              </Button>
-              <Button variant="outline">
-                <Download className="mr-2 h-4 w-4" />
-                Download
-              </Button>
+            <CardContent>
+              <SyncControls workdirId={workdirId} onSyncComplete={fetchData} />
             </CardContent>
           </Card>
 

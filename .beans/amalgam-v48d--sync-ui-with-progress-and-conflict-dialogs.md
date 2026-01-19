@@ -1,11 +1,11 @@
 ---
 # amalgam-v48d
 title: Sync UI with progress and conflict dialogs
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-01-19T10:53:07Z
-updated_at: 2026-01-19T10:53:07Z
+updated_at: 2026-01-19T12:19:29Z
 parent: amalgam-azfj
 ---
 

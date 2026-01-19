@@ -1,11 +1,11 @@
 ---
 # amalgam-j1wz
 title: Local manifest building
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-01-19T10:52:52Z
-updated_at: 2026-01-19T10:52:52Z
+updated_at: 2026-01-19T12:16:07Z
 parent: amalgam-azfj
 ---
 
