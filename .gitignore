@@ -42,3 +42,7 @@ coverage/
 
 # Folder for local test workspaces
 local
+
+# Folder for the "server" dir for testing
+data/*
+!data/.gitkeep
