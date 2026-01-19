@@ -33,22 +33,36 @@ When available, use the **playwriter MCP server** to visually inspect and test c
 **Fallback**: If playwriter is not available, use the `agent-browser` skill instead:
 - Load the skill with `/agent-browser` 
 - Provides similar browser automation capabilities
+- DO NOT use `playwright-mcp`, it's very token heavy
 
 This is especially useful for:
 - Verifying frontend changes render correctly
 - Testing user flows end-to-end
 - Debugging layout/styling issues
 - Taking screenshots for documentation
+- 
+## Work on next ticket 
+If the user tells you to "work on the next ticket" or "next step" or "next phase", get the most important ticket from your perspective from beans and work on it. Work ONLY on one ticket at the same time.
+If you realize you need to do another thing, create a new ticket for this. 
+When you finish a ticket successfully, mark the ticket as done in beans and Commit and Push afterwards. 
+Use ultrawork.
 
 ## Default Ralp-Loop Prompt 
 Get the most important ticket from your perspective from beans and work on it. Work ONLY on one ticket at the same time.
 If you realize you need to do another thing, create a new ticket for this. 
 When you finish a ticket successfully, mark the ticket as done in beans and Commit and Push afterwards. 
-You're done when all tickets are implemented.
+You're done when all tickets are implemented or the user stops you manually.
+Use ultrawork.
+
+## Default Ralp-Loop Prompt 
+Get the most important ticket from your perspective from beans and work on it. Work ONLY on one ticket at the same time.
+If you realize you need to do another thing, create a new ticket for this. 
+When you finish a ticket successfully, mark the ticket as done in beans and Commit and Push afterwards. 
+You're done when all tickets are implemented or if the user stops you explicitely.
 Use ultrawork.
 
 ## Integration Testing Ralph-Loop 
-Now look at the served website at http://localhost:3000 via playwrigher. 
+Look at the served website via playwrighter. Caution: you do not have exclusive access to playwrighter! ALWAYS verify that you use the right tab with your website in it (basically based on the port number, or the header on the page).
 Test every ticket in beans, which is marked as done and validate it as a user would. 
 If the test works, add this result to the ticket and mark it as "ai verified".
 If it does not, create a new ticket in beans as a bug for later inspection, 
