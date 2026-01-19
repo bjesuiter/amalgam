@@ -1,11 +1,11 @@
 ---
 # amalgam-gr43
 title: Create workdir dialog with folder selection
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-01-19T10:52:33Z
-updated_at: 2026-01-19T10:52:33Z
+updated_at: 2026-01-19T12:11:45Z
 parent: amalgam-2k5g
 ---
 

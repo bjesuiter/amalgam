@@ -1,11 +1,11 @@
 ---
 # amalgam-9c7a
 title: Workdir list and detail UI
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-01-19T10:52:29Z
-updated_at: 2026-01-19T10:52:29Z
+updated_at: 2026-01-19T12:14:42Z
 parent: amalgam-2k5g
 ---
 
