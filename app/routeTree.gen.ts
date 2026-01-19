@@ -20,6 +20,9 @@ import { Route as ApiWorkdirsIdUploadRouteImport } from './routes/api/workdirs.$
 import { Route as ApiWorkdirsIdManifestRouteImport } from './routes/api/workdirs.$id.manifest'
 import { Route as ApiWorkdirsIdDownloadRouteImport } from './routes/api/workdirs.$id.download'
 import { Route as ApiWorkdirsIdChatsRouteImport } from './routes/api/workdirs.$id.chats'
+import { Route as ApiChatsChatIdStreamRouteImport } from './routes/api/chats.$chatId.stream'
+import { Route as ApiChatsChatIdMessageRouteImport } from './routes/api/chats.$chatId.message'
+import { Route as ApiChatsChatIdCancelRouteImport } from './routes/api/chats.$chatId.cancel'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -77,6 +80,21 @@ const ApiWorkdirsIdChatsRoute = ApiWorkdirsIdChatsRouteImport.update({
   path: '/chats',
   getParentRoute: () => ApiWorkdirsIdRoute,
 } as any)
+const ApiChatsChatIdStreamRoute = ApiChatsChatIdStreamRouteImport.update({
+  id: '/api/chats/$chatId/stream',
+  path: '/api/chats/$chatId/stream',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatsChatIdMessageRoute = ApiChatsChatIdMessageRouteImport.update({
+  id: '/api/chats/$chatId/message',
+  path: '/api/chats/$chatId/message',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiChatsChatIdCancelRoute = ApiChatsChatIdCancelRouteImport.update({
+  id: '/api/chats/$chatId/cancel',
+  path: '/api/chats/$chatId/cancel',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -85,6 +103,9 @@ export interface FileRoutesByFullPath {
   '/api/chats/$id': typeof ApiChatsIdRoute
   '/api/workdirs/$id': typeof ApiWorkdirsIdRouteWithChildren
   '/workdirs/$workdirId/': typeof WorkdirsWorkdirIdIndexRoute
+  '/api/chats/$chatId/cancel': typeof ApiChatsChatIdCancelRoute
+  '/api/chats/$chatId/message': typeof ApiChatsChatIdMessageRoute
+  '/api/chats/$chatId/stream': typeof ApiChatsChatIdStreamRoute
   '/api/workdirs/$id/chats': typeof ApiWorkdirsIdChatsRoute
   '/api/workdirs/$id/download': typeof ApiWorkdirsIdDownloadRoute
   '/api/workdirs/$id/manifest': typeof ApiWorkdirsIdManifestRoute
@@ -98,6 +119,9 @@ export interface FileRoutesByTo {
   '/api/chats/$id': typeof ApiChatsIdRoute
   '/api/workdirs/$id': typeof ApiWorkdirsIdRouteWithChildren
   '/workdirs/$workdirId': typeof WorkdirsWorkdirIdIndexRoute
+  '/api/chats/$chatId/cancel': typeof ApiChatsChatIdCancelRoute
+  '/api/chats/$chatId/message': typeof ApiChatsChatIdMessageRoute
+  '/api/chats/$chatId/stream': typeof ApiChatsChatIdStreamRoute
   '/api/workdirs/$id/chats': typeof ApiWorkdirsIdChatsRoute
   '/api/workdirs/$id/download': typeof ApiWorkdirsIdDownloadRoute
   '/api/workdirs/$id/manifest': typeof ApiWorkdirsIdManifestRoute
@@ -112,6 +136,9 @@ export interface FileRoutesById {
   '/api/chats/$id': typeof ApiChatsIdRoute
   '/api/workdirs/$id': typeof ApiWorkdirsIdRouteWithChildren
   '/workdirs/$workdirId/': typeof WorkdirsWorkdirIdIndexRoute
+  '/api/chats/$chatId/cancel': typeof ApiChatsChatIdCancelRoute
+  '/api/chats/$chatId/message': typeof ApiChatsChatIdMessageRoute
+  '/api/chats/$chatId/stream': typeof ApiChatsChatIdStreamRoute
   '/api/workdirs/$id/chats': typeof ApiWorkdirsIdChatsRoute
   '/api/workdirs/$id/download': typeof ApiWorkdirsIdDownloadRoute
   '/api/workdirs/$id/manifest': typeof ApiWorkdirsIdManifestRoute
@@ -127,6 +154,9 @@ export interface FileRouteTypes {
     | '/api/chats/$id'
     | '/api/workdirs/$id'
     | '/workdirs/$workdirId/'
+    | '/api/chats/$chatId/cancel'
+    | '/api/chats/$chatId/message'
+    | '/api/chats/$chatId/stream'
     | '/api/workdirs/$id/chats'
     | '/api/workdirs/$id/download'
     | '/api/workdirs/$id/manifest'
@@ -140,6 +170,9 @@ export interface FileRouteTypes {
     | '/api/chats/$id'
     | '/api/workdirs/$id'
     | '/workdirs/$workdirId'
+    | '/api/chats/$chatId/cancel'
+    | '/api/chats/$chatId/message'
+    | '/api/chats/$chatId/stream'
     | '/api/workdirs/$id/chats'
     | '/api/workdirs/$id/download'
     | '/api/workdirs/$id/manifest'
@@ -153,6 +186,9 @@ export interface FileRouteTypes {
     | '/api/chats/$id'
     | '/api/workdirs/$id'
     | '/workdirs/$workdirId/'
+    | '/api/chats/$chatId/cancel'
+    | '/api/chats/$chatId/message'
+    | '/api/chats/$chatId/stream'
     | '/api/workdirs/$id/chats'
     | '/api/workdirs/$id/download'
     | '/api/workdirs/$id/manifest'
@@ -166,6 +202,9 @@ export interface RootRouteChildren {
   WorkdirsIndexRoute: typeof WorkdirsIndexRoute
   ApiChatsIdRoute: typeof ApiChatsIdRoute
   WorkdirsWorkdirIdIndexRoute: typeof WorkdirsWorkdirIdIndexRoute
+  ApiChatsChatIdCancelRoute: typeof ApiChatsChatIdCancelRoute
+  ApiChatsChatIdMessageRoute: typeof ApiChatsChatIdMessageRoute
+  ApiChatsChatIdStreamRoute: typeof ApiChatsChatIdStreamRoute
   WorkdirsWorkdirIdChatsChatIdRoute: typeof WorkdirsWorkdirIdChatsChatIdRoute
 }
 
@@ -248,6 +287,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiWorkdirsIdChatsRouteImport
       parentRoute: typeof ApiWorkdirsIdRoute
     }
+    '/api/chats/$chatId/stream': {
+      id: '/api/chats/$chatId/stream'
+      path: '/api/chats/$chatId/stream'
+      fullPath: '/api/chats/$chatId/stream'
+      preLoaderRoute: typeof ApiChatsChatIdStreamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chats/$chatId/message': {
+      id: '/api/chats/$chatId/message'
+      path: '/api/chats/$chatId/message'
+      fullPath: '/api/chats/$chatId/message'
+      preLoaderRoute: typeof ApiChatsChatIdMessageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/chats/$chatId/cancel': {
+      id: '/api/chats/$chatId/cancel'
+      path: '/api/chats/$chatId/cancel'
+      fullPath: '/api/chats/$chatId/cancel'
+      preLoaderRoute: typeof ApiChatsChatIdCancelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -287,6 +347,9 @@ const rootRouteChildren: RootRouteChildren = {
   WorkdirsIndexRoute: WorkdirsIndexRoute,
   ApiChatsIdRoute: ApiChatsIdRoute,
   WorkdirsWorkdirIdIndexRoute: WorkdirsWorkdirIdIndexRoute,
+  ApiChatsChatIdCancelRoute: ApiChatsChatIdCancelRoute,
+  ApiChatsChatIdMessageRoute: ApiChatsChatIdMessageRoute,
+  ApiChatsChatIdStreamRoute: ApiChatsChatIdStreamRoute,
   WorkdirsWorkdirIdChatsChatIdRoute: WorkdirsWorkdirIdChatsChatIdRoute,
 }
 export const routeTree = rootRouteImport
