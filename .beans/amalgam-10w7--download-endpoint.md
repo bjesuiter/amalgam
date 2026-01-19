@@ -1,11 +1,11 @@
 ---
 # amalgam-10w7
 title: Download endpoint
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-01-19T10:53:03Z
-updated_at: 2026-01-19T10:53:03Z
+updated_at: 2026-01-19T12:03:55Z
 parent: amalgam-azfj
 ---
 
