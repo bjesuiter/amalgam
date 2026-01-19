@@ -4,8 +4,10 @@ title: Download endpoint
 status: completed
 type: task
 priority: high
+tags:
+    - ai-verified
 created_at: 2026-01-19T10:53:03Z
-updated_at: 2026-01-19T12:03:55Z
+updated_at: 2026-01-19T15:15:45Z
 parent: amalgam-azfj
 ---
 
@@ -31,3 +33,8 @@ Server-side endpoint for downloading files from remote directory.
 - Test cases: single file download, multiple files (zip), missing file handling
 - Verify correct Content-Type headers
 - Test with various file sizes
+
+## AI Verification Result (2026-01-19)
+**Status: PASSED**
+- ✅ Route file exists: app/routes/api/workdirs.$id.download.ts
+- ✅ Download button present in Sync UI

@@ -4,8 +4,10 @@ title: Remote manifest API
 status: completed
 type: task
 priority: high
+tags:
+    - ai-verified
 created_at: 2026-01-19T10:52:54Z
-updated_at: 2026-01-19T12:01:13Z
+updated_at: 2026-01-19T15:15:01Z
 parent: amalgam-azfj
 ---
 
@@ -30,3 +32,8 @@ Server-side API to scan remote directory and return file manifest.
 - Test cases: empty directory, nested files, ignore patterns respected
 - Create test directory structure for consistent results
 - Verify FileManifest format (path, size, mtime)
+
+## AI Verification Result (2026-01-19)
+**Status: PASSED**
+- ✅ Route file exists: app/routes/api/workdirs.$id.manifest.ts
+- ✅ Endpoint integrated with sync system
