@@ -8,7 +8,14 @@ import { SyncRequiredDialog } from '~/components/SyncRequiredDialog'
 import { DebugSidebar, type DebugLogEntry, type SessionInfo } from '~/components/DebugSidebar'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { cn } from '~/lib/utils'
-import { Trash2, Bug } from 'lucide-react'
+import { Trash2, Bug, Pencil, Check, X } from 'lucide-react'
+import { Input } from '~/components/ui/input'
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from '~/components/ui/context-menu'
 import { useSyncCheck, type SyncCheckResult } from '~/lib/useSyncCheck'
 import { getWorkdirHandle } from '~/lib/fs-storage'
 import { buildLocalManifest, computeDiff, type FileManifest } from '~/lib/sync'
@@ -68,6 +75,9 @@ function ChatPage() {
   const [hasCheckedSync, setHasCheckedSync] = useState(false)
   
   const [debugSidebarOpen, setDebugSidebarOpen] = useState(isDevMode())
+  const [isEditingTitle, setIsEditingTitle] = useState(false)
+  const [editTitleValue, setEditTitleValue] = useState('')
+  const titleInputRef = useRef<HTMLInputElement>(null)
   const [debugLogs, setDebugLogs] = useState<DebugLogEntry[]>([])
   const [sessionInfo, setSessionInfo] = useState<SessionInfo>({
     connectionStatus: 'connecting',
@@ -364,6 +374,49 @@ function ChatPage() {
     }
   }
 
+  const startEditingTitle = () => {
+    setEditTitleValue(chat?.title || '')
+    setIsEditingTitle(true)
+    setTimeout(() => titleInputRef.current?.focus(), 0)
+  }
+
+  const cancelEditingTitle = () => {
+    setIsEditingTitle(false)
+    setEditTitleValue('')
+  }
+
+  const saveTitle = async () => {
+    const newTitle = editTitleValue.trim()
+    
+    try {
+      const response = await fetch(`/api/chats/${chatId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: newTitle }),
+      })
+      
+      if (!response.ok) {
+        throw new Error('Failed to rename chat')
+      }
+      
+      setChats((prev) =>
+        prev.map((c) => (c.id === chatId ? { ...c, title: newTitle || null } : c))
+      )
+      setIsEditingTitle(false)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to rename chat')
+    }
+  }
+
+  const handleTitleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      saveTitle()
+    } else if (e.key === 'Escape') {
+      cancelEditingTitle()
+    }
+  }
+
   if (loading) {
     return (
       <Layout workdirs={[]}>
@@ -380,7 +433,50 @@ function ChatPage() {
         <div className="flex flex-1 flex-col">
           <header className="flex h-14 items-center justify-between border-b px-4">
             <div className="flex items-center gap-2">
-              <h1 className="font-semibold">{chat?.title || 'New Chat'}</h1>
+              {isEditingTitle ? (
+                <div className="flex items-center gap-1">
+                  <Input
+                    ref={titleInputRef}
+                    value={editTitleValue}
+                    onChange={(e) => setEditTitleValue(e.target.value)}
+                    onKeyDown={handleTitleKeyDown}
+                    onBlur={saveTitle}
+                    className="h-8 w-48 font-semibold"
+                    placeholder="Chat title..."
+                  />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8"
+                    onClick={saveTitle}
+                  >
+                    <Check className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8"
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={cancelEditingTitle}
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ) : (
+                <ContextMenu>
+                  <ContextMenuTrigger>
+                    <h1 className="font-semibold">
+                      {chat?.title || 'New Chat'}
+                    </h1>
+                  </ContextMenuTrigger>
+                  <ContextMenuContent>
+                    <ContextMenuItem onClick={startEditingTitle}>
+                      <Pencil className="mr-2 h-4 w-4" />
+                      Rename
+                    </ContextMenuItem>
+                  </ContextMenuContent>
+                </ContextMenu>
+              )}
               <span
                 className={cn(
                   'rounded-full px-2 py-0.5 text-xs',
