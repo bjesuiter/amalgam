@@ -1,11 +1,11 @@
 ---
 # amalgam-d0si
 title: Initialize TanStack Start project
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-01-19T10:51:42Z
-updated_at: 2026-01-19T10:51:42Z
+updated_at: 2026-01-19T11:32:22Z
 parent: amalgam-5gne
 ---
 

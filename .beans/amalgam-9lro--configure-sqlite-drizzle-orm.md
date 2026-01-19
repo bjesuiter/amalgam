@@ -1,11 +1,11 @@
 ---
 # amalgam-9lro
 title: Configure SQLite + Drizzle ORM
-status: todo
+status: in-progress
 type: task
 priority: high
 created_at: 2026-01-19T10:51:51Z
-updated_at: 2026-01-19T10:51:51Z
+updated_at: 2026-01-19T11:34:49Z
 parent: amalgam-5gne
 ---
 

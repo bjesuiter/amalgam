@@ -1,11 +1,11 @@
 ---
 # amalgam-m2sb
 title: Set up TailwindCSS + shadcn/ui
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-01-19T10:51:45Z
-updated_at: 2026-01-19T10:51:45Z
+updated_at: 2026-01-19T11:34:37Z
 parent: amalgam-5gne
 ---
 
