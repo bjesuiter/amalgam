@@ -1,11 +1,11 @@
 ---
 # amalgam-x70r
 title: Implement exe.dev auth middleware
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-01-19T10:51:54Z
-updated_at: 2026-01-19T10:51:54Z
+updated_at: 2026-01-19T11:49:27Z
 parent: amalgam-5gne
 ---
 
