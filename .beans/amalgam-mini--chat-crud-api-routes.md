@@ -1,11 +1,11 @@
 ---
 # amalgam-mini
 title: Chat CRUD API routes
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-01-19T10:53:36Z
-updated_at: 2026-01-19T10:53:36Z
+updated_at: 2026-01-19T11:59:19Z
 parent: amalgam-7u0f
 ---
 

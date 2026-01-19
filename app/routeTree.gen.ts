@@ -14,7 +14,9 @@ import { Route as WorkdirsIndexRouteImport } from './routes/workdirs/index'
 import { Route as ApiWorkdirsRouteImport } from './routes/api/workdirs'
 import { Route as WorkdirsWorkdirIdIndexRouteImport } from './routes/workdirs/$workdirId/index'
 import { Route as ApiWorkdirsIdRouteImport } from './routes/api/workdirs.$id'
+import { Route as ApiChatsIdRouteImport } from './routes/api/chats.$id'
 import { Route as WorkdirsWorkdirIdChatsChatIdRouteImport } from './routes/workdirs/$workdirId/chats/$chatId'
+import { Route as ApiWorkdirsIdChatsRouteImport } from './routes/api/workdirs.$id.chats'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -41,27 +43,41 @@ const ApiWorkdirsIdRoute = ApiWorkdirsIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => ApiWorkdirsRoute,
 } as any)
+const ApiChatsIdRoute = ApiChatsIdRouteImport.update({
+  id: '/api/chats/$id',
+  path: '/api/chats/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WorkdirsWorkdirIdChatsChatIdRoute =
   WorkdirsWorkdirIdChatsChatIdRouteImport.update({
     id: '/workdirs/$workdirId/chats/$chatId',
     path: '/workdirs/$workdirId/chats/$chatId',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiWorkdirsIdChatsRoute = ApiWorkdirsIdChatsRouteImport.update({
+  id: '/chats',
+  path: '/chats',
+  getParentRoute: () => ApiWorkdirsIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/workdirs': typeof ApiWorkdirsRouteWithChildren
   '/workdirs/': typeof WorkdirsIndexRoute
-  '/api/workdirs/$id': typeof ApiWorkdirsIdRoute
+  '/api/chats/$id': typeof ApiChatsIdRoute
+  '/api/workdirs/$id': typeof ApiWorkdirsIdRouteWithChildren
   '/workdirs/$workdirId/': typeof WorkdirsWorkdirIdIndexRoute
+  '/api/workdirs/$id/chats': typeof ApiWorkdirsIdChatsRoute
   '/workdirs/$workdirId/chats/$chatId': typeof WorkdirsWorkdirIdChatsChatIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/workdirs': typeof ApiWorkdirsRouteWithChildren
   '/workdirs': typeof WorkdirsIndexRoute
-  '/api/workdirs/$id': typeof ApiWorkdirsIdRoute
+  '/api/chats/$id': typeof ApiChatsIdRoute
+  '/api/workdirs/$id': typeof ApiWorkdirsIdRouteWithChildren
   '/workdirs/$workdirId': typeof WorkdirsWorkdirIdIndexRoute
+  '/api/workdirs/$id/chats': typeof ApiWorkdirsIdChatsRoute
   '/workdirs/$workdirId/chats/$chatId': typeof WorkdirsWorkdirIdChatsChatIdRoute
 }
 export interface FileRoutesById {
@@ -69,8 +85,10 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/api/workdirs': typeof ApiWorkdirsRouteWithChildren
   '/workdirs/': typeof WorkdirsIndexRoute
-  '/api/workdirs/$id': typeof ApiWorkdirsIdRoute
+  '/api/chats/$id': typeof ApiChatsIdRoute
+  '/api/workdirs/$id': typeof ApiWorkdirsIdRouteWithChildren
   '/workdirs/$workdirId/': typeof WorkdirsWorkdirIdIndexRoute
+  '/api/workdirs/$id/chats': typeof ApiWorkdirsIdChatsRoute
   '/workdirs/$workdirId/chats/$chatId': typeof WorkdirsWorkdirIdChatsChatIdRoute
 }
 export interface FileRouteTypes {
@@ -79,24 +97,30 @@ export interface FileRouteTypes {
     | '/'
     | '/api/workdirs'
     | '/workdirs/'
+    | '/api/chats/$id'
     | '/api/workdirs/$id'
     | '/workdirs/$workdirId/'
+    | '/api/workdirs/$id/chats'
     | '/workdirs/$workdirId/chats/$chatId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/api/workdirs'
     | '/workdirs'
+    | '/api/chats/$id'
     | '/api/workdirs/$id'
     | '/workdirs/$workdirId'
+    | '/api/workdirs/$id/chats'
     | '/workdirs/$workdirId/chats/$chatId'
   id:
     | '__root__'
     | '/'
     | '/api/workdirs'
     | '/workdirs/'
+    | '/api/chats/$id'
     | '/api/workdirs/$id'
     | '/workdirs/$workdirId/'
+    | '/api/workdirs/$id/chats'
     | '/workdirs/$workdirId/chats/$chatId'
   fileRoutesById: FileRoutesById
 }
@@ -104,6 +128,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiWorkdirsRoute: typeof ApiWorkdirsRouteWithChildren
   WorkdirsIndexRoute: typeof WorkdirsIndexRoute
+  ApiChatsIdRoute: typeof ApiChatsIdRoute
   WorkdirsWorkdirIdIndexRoute: typeof WorkdirsWorkdirIdIndexRoute
   WorkdirsWorkdirIdChatsChatIdRoute: typeof WorkdirsWorkdirIdChatsChatIdRoute
 }
@@ -145,6 +170,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiWorkdirsIdRouteImport
       parentRoute: typeof ApiWorkdirsRoute
     }
+    '/api/chats/$id': {
+      id: '/api/chats/$id'
+      path: '/api/chats/$id'
+      fullPath: '/api/chats/$id'
+      preLoaderRoute: typeof ApiChatsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/workdirs/$workdirId/chats/$chatId': {
       id: '/workdirs/$workdirId/chats/$chatId'
       path: '/workdirs/$workdirId/chats/$chatId'
@@ -152,15 +184,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkdirsWorkdirIdChatsChatIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/workdirs/$id/chats': {
+      id: '/api/workdirs/$id/chats'
+      path: '/chats'
+      fullPath: '/api/workdirs/$id/chats'
+      preLoaderRoute: typeof ApiWorkdirsIdChatsRouteImport
+      parentRoute: typeof ApiWorkdirsIdRoute
+    }
   }
 }
 
+interface ApiWorkdirsIdRouteChildren {
+  ApiWorkdirsIdChatsRoute: typeof ApiWorkdirsIdChatsRoute
+}
+
+const ApiWorkdirsIdRouteChildren: ApiWorkdirsIdRouteChildren = {
+  ApiWorkdirsIdChatsRoute: ApiWorkdirsIdChatsRoute,
+}
+
+const ApiWorkdirsIdRouteWithChildren = ApiWorkdirsIdRoute._addFileChildren(
+  ApiWorkdirsIdRouteChildren,
+)
+
 interface ApiWorkdirsRouteChildren {
-  ApiWorkdirsIdRoute: typeof ApiWorkdirsIdRoute
+  ApiWorkdirsIdRoute: typeof ApiWorkdirsIdRouteWithChildren
 }
 
 const ApiWorkdirsRouteChildren: ApiWorkdirsRouteChildren = {
-  ApiWorkdirsIdRoute: ApiWorkdirsIdRoute,
+  ApiWorkdirsIdRoute: ApiWorkdirsIdRouteWithChildren,
 }
 
 const ApiWorkdirsRouteWithChildren = ApiWorkdirsRoute._addFileChildren(
@@ -171,6 +222,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiWorkdirsRoute: ApiWorkdirsRouteWithChildren,
   WorkdirsIndexRoute: WorkdirsIndexRoute,
+  ApiChatsIdRoute: ApiChatsIdRoute,
   WorkdirsWorkdirIdIndexRoute: WorkdirsWorkdirIdIndexRoute,
   WorkdirsWorkdirIdChatsChatIdRoute: WorkdirsWorkdirIdChatsChatIdRoute,
 }
