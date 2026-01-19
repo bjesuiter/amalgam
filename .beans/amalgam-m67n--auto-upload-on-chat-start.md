@@ -1,11 +1,11 @@
 ---
 # amalgam-m67n
 title: Auto-upload on chat start
-status: todo
+status: completed
 type: task
 priority: normal
 created_at: 2026-01-19T10:53:43Z
-updated_at: 2026-01-19T10:53:43Z
+updated_at: 2026-01-19T18:44:00Z
 parent: amalgam-7u0f
 ---
 

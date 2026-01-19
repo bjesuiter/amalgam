@@ -4,9 +4,14 @@ import { ChatMessage, type Message } from '~/components/ChatMessage'
 import { ChatInput } from '~/components/ChatInput'
 import { Button } from '~/components/ui/button'
 import { ConfirmDialog } from '~/components/ConfirmDialog'
+import { SyncRequiredDialog } from '~/components/SyncRequiredDialog'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { cn } from '~/lib/utils'
 import { Trash2 } from 'lucide-react'
+import { useSyncCheck, type SyncCheckResult } from '~/lib/useSyncCheck'
+import { getWorkdirHandle } from '~/lib/fs-storage'
+import { buildLocalManifest, computeDiff, type FileManifest } from '~/lib/sync'
+import { readFile } from '~/lib/fs-api'
 
 export const Route = createFileRoute('/workdirs/$workdirId/chats/$chatId')({
   component: ChatPage,
@@ -45,6 +50,13 @@ function ChatPage() {
   const [error, setError] = useState<string | null>(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [deleting, setDeleting] = useState(false)
+  const [syncDialogOpen, setSyncDialogOpen] = useState(false)
+  const [pendingSyncResult, setPendingSyncResult] = useState<SyncCheckResult | null>(null)
+  const [pendingMessage, setPendingMessage] = useState<string | null>(null)
+  const [syncing, setSyncing] = useState(false)
+  const [hasCheckedSync, setHasCheckedSync] = useState(false)
+
+  const { checkSync, checking: checkingSync } = useSyncCheck(workdirId)
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const eventSourceRef = useRef<EventSource | null>(null)
@@ -160,7 +172,7 @@ function ChatPage() {
     }
   }, [chatId])
 
-  const handleSend = async (content: string) => {
+  const doSendMessage = async (content: string) => {
     setMessages((prev) => [
       ...prev,
       {
@@ -186,6 +198,97 @@ function ChatPage() {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to send message')
     }
+  }
+
+  const handleSend = async (content: string) => {
+    if (hasCheckedSync) {
+      await doSendMessage(content)
+      return
+    }
+
+    const syncResult = await checkSync()
+    if (!syncResult) {
+      await doSendMessage(content)
+      setHasCheckedSync(true)
+      return
+    }
+
+    if (!syncResult.needsSync) {
+      await doSendMessage(content)
+      setHasCheckedSync(true)
+      return
+    }
+
+    setPendingMessage(content)
+    setPendingSyncResult(syncResult)
+    setSyncDialogOpen(true)
+  }
+
+  const handleSyncAndSend = async () => {
+    if (!pendingMessage) return
+
+    setSyncing(true)
+    setError(null)
+
+    try {
+      const handle = await getWorkdirHandle(workdirId)
+      if (!handle) {
+        throw new Error('Local folder not connected')
+      }
+
+      const localManifest = await buildLocalManifest(handle)
+      const manifestResponse = await fetch(`/api/workdirs/${workdirId}/manifest`)
+      if (!manifestResponse.ok) {
+        throw new Error('Failed to fetch remote manifest')
+      }
+      const { files: remoteManifest } = (await manifestResponse.json()) as { files: FileManifest[] }
+
+      const diff = computeDiff(localManifest, remoteManifest)
+      const filesToUpload = [...diff.newFiles, ...diff.changedFiles]
+
+      if (filesToUpload.length > 0) {
+        const formData = new FormData()
+        for (const file of filesToUpload) {
+          const blob = await readFile(handle, file.path)
+          formData.append('files', blob, file.path)
+        }
+
+        const uploadResponse = await fetch(`/api/workdirs/${workdirId}/upload`, {
+          method: 'POST',
+          body: formData,
+        })
+
+        if (!uploadResponse.ok) {
+          throw new Error('Upload failed')
+        }
+      }
+
+      setSyncDialogOpen(false)
+      setHasCheckedSync(true)
+      await doSendMessage(pendingMessage)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Sync failed')
+    } finally {
+      setSyncing(false)
+      setPendingMessage(null)
+      setPendingSyncResult(null)
+    }
+  }
+
+  const handleSkipSync = async () => {
+    setSyncDialogOpen(false)
+    setHasCheckedSync(true)
+    if (pendingMessage) {
+      await doSendMessage(pendingMessage)
+    }
+    setPendingMessage(null)
+    setPendingSyncResult(null)
+  }
+
+  const handleCancelSync = () => {
+    setSyncDialogOpen(false)
+    setPendingMessage(null)
+    setPendingSyncResult(null)
   }
 
   const handleCancel = async () => {
@@ -290,6 +393,16 @@ function ChatPage() {
         variant="destructive"
         loading={deleting}
         onConfirm={handleDelete}
+      />
+
+      <SyncRequiredDialog
+        open={syncDialogOpen}
+        onOpenChange={setSyncDialogOpen}
+        syncResult={pendingSyncResult}
+        syncing={syncing}
+        onSync={handleSyncAndSend}
+        onSkip={handleSkipSync}
+        onCancel={handleCancelSync}
       />
     </Layout>
   )
