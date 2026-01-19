@@ -4,8 +4,10 @@ title: Create basic layout and routing
 status: completed
 type: task
 priority: high
+tags:
+    - ai-verified
 created_at: 2026-01-19T10:51:58Z
-updated_at: 2026-01-19T11:46:35Z
+updated_at: 2026-01-19T15:09:51Z
 parent: amalgam-5gne
 ---
 
@@ -35,3 +37,12 @@ Layout
 - Verify: sidebar renders with correct structure
 - Verify: all routes are accessible and render content
 - Verify: layout responsive on different viewports
+
+## AI Verification Result (2026-01-19)
+**Status: PASSED**
+- ✅ Index route redirects to /workdirs (confirmed)
+- ✅ Sidebar renders with correct structure (WORKDIRS section, navigation)
+- ✅ /workdirs route accessible and renders workdir list
+- ✅ /workdirs/:id route shows workdir detail with sync controls
+- ✅ /workdirs/:id/chats/:chatId route shows chat view with message input
+- ✅ Navigation works both ways (Amalgam link returns to /workdirs)
