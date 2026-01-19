@@ -1,11 +1,11 @@
 ---
 # amalgam-fupg
 title: Chat UI with message streaming
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-01-19T10:53:40Z
-updated_at: 2026-01-19T10:53:40Z
+updated_at: 2026-01-19T15:34:34Z
 parent: amalgam-7u0f
 ---
 

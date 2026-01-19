@@ -31,3 +31,47 @@
     @apply bg-background text-foreground;
   }
 }
+
+.prose {
+  @apply text-foreground;
+}
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  @apply font-semibold text-foreground mt-4 mb-2;
+}
+.prose h1 {
+  @apply text-xl;
+}
+.prose h2 {
+  @apply text-lg;
+}
+.prose p {
+  @apply my-2;
+}
+.prose ul,
+.prose ol {
+  @apply my-2 ml-4;
+}
+.prose li {
+  @apply my-1;
+}
+.prose code {
+  @apply bg-muted px-1 py-0.5 rounded text-sm font-mono;
+}
+.prose pre {
+  @apply bg-muted p-3 rounded-md overflow-x-auto my-3;
+}
+.prose pre code {
+  @apply bg-transparent p-0;
+}
+.prose a {
+  @apply text-primary underline;
+}
+.prose blockquote {
+  @apply border-l-4 border-muted-foreground/30 pl-4 italic my-2;
+}
+.prose strong {
+  @apply font-semibold;
+}
