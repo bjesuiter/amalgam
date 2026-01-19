@@ -1,11 +1,11 @@
 ---
 # amalgam-gjf2
 title: Upload endpoint with chunked support
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-01-19T10:53:01Z
-updated_at: 2026-01-19T10:53:01Z
+updated_at: 2026-01-19T12:06:34Z
 parent: amalgam-azfj
 ---
 

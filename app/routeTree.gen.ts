@@ -16,6 +16,7 @@ import { Route as WorkdirsWorkdirIdIndexRouteImport } from './routes/workdirs/$w
 import { Route as ApiWorkdirsIdRouteImport } from './routes/api/workdirs.$id'
 import { Route as ApiChatsIdRouteImport } from './routes/api/chats.$id'
 import { Route as WorkdirsWorkdirIdChatsChatIdRouteImport } from './routes/workdirs/$workdirId/chats/$chatId'
+import { Route as ApiWorkdirsIdUploadRouteImport } from './routes/api/workdirs.$id.upload'
 import { Route as ApiWorkdirsIdManifestRouteImport } from './routes/api/workdirs.$id.manifest'
 import { Route as ApiWorkdirsIdDownloadRouteImport } from './routes/api/workdirs.$id.download'
 import { Route as ApiWorkdirsIdChatsRouteImport } from './routes/api/workdirs.$id.chats'
@@ -56,6 +57,11 @@ const WorkdirsWorkdirIdChatsChatIdRoute =
     path: '/workdirs/$workdirId/chats/$chatId',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiWorkdirsIdUploadRoute = ApiWorkdirsIdUploadRouteImport.update({
+  id: '/upload',
+  path: '/upload',
+  getParentRoute: () => ApiWorkdirsIdRoute,
+} as any)
 const ApiWorkdirsIdManifestRoute = ApiWorkdirsIdManifestRouteImport.update({
   id: '/manifest',
   path: '/manifest',
@@ -82,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/api/workdirs/$id/chats': typeof ApiWorkdirsIdChatsRoute
   '/api/workdirs/$id/download': typeof ApiWorkdirsIdDownloadRoute
   '/api/workdirs/$id/manifest': typeof ApiWorkdirsIdManifestRoute
+  '/api/workdirs/$id/upload': typeof ApiWorkdirsIdUploadRoute
   '/workdirs/$workdirId/chats/$chatId': typeof WorkdirsWorkdirIdChatsChatIdRoute
 }
 export interface FileRoutesByTo {
@@ -94,6 +101,7 @@ export interface FileRoutesByTo {
   '/api/workdirs/$id/chats': typeof ApiWorkdirsIdChatsRoute
   '/api/workdirs/$id/download': typeof ApiWorkdirsIdDownloadRoute
   '/api/workdirs/$id/manifest': typeof ApiWorkdirsIdManifestRoute
+  '/api/workdirs/$id/upload': typeof ApiWorkdirsIdUploadRoute
   '/workdirs/$workdirId/chats/$chatId': typeof WorkdirsWorkdirIdChatsChatIdRoute
 }
 export interface FileRoutesById {
@@ -107,6 +115,7 @@ export interface FileRoutesById {
   '/api/workdirs/$id/chats': typeof ApiWorkdirsIdChatsRoute
   '/api/workdirs/$id/download': typeof ApiWorkdirsIdDownloadRoute
   '/api/workdirs/$id/manifest': typeof ApiWorkdirsIdManifestRoute
+  '/api/workdirs/$id/upload': typeof ApiWorkdirsIdUploadRoute
   '/workdirs/$workdirId/chats/$chatId': typeof WorkdirsWorkdirIdChatsChatIdRoute
 }
 export interface FileRouteTypes {
@@ -121,6 +130,7 @@ export interface FileRouteTypes {
     | '/api/workdirs/$id/chats'
     | '/api/workdirs/$id/download'
     | '/api/workdirs/$id/manifest'
+    | '/api/workdirs/$id/upload'
     | '/workdirs/$workdirId/chats/$chatId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -133,6 +143,7 @@ export interface FileRouteTypes {
     | '/api/workdirs/$id/chats'
     | '/api/workdirs/$id/download'
     | '/api/workdirs/$id/manifest'
+    | '/api/workdirs/$id/upload'
     | '/workdirs/$workdirId/chats/$chatId'
   id:
     | '__root__'
@@ -145,6 +156,7 @@ export interface FileRouteTypes {
     | '/api/workdirs/$id/chats'
     | '/api/workdirs/$id/download'
     | '/api/workdirs/$id/manifest'
+    | '/api/workdirs/$id/upload'
     | '/workdirs/$workdirId/chats/$chatId'
   fileRoutesById: FileRoutesById
 }
@@ -208,6 +220,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkdirsWorkdirIdChatsChatIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/workdirs/$id/upload': {
+      id: '/api/workdirs/$id/upload'
+      path: '/upload'
+      fullPath: '/api/workdirs/$id/upload'
+      preLoaderRoute: typeof ApiWorkdirsIdUploadRouteImport
+      parentRoute: typeof ApiWorkdirsIdRoute
+    }
     '/api/workdirs/$id/manifest': {
       id: '/api/workdirs/$id/manifest'
       path: '/manifest'
@@ -236,12 +255,14 @@ interface ApiWorkdirsIdRouteChildren {
   ApiWorkdirsIdChatsRoute: typeof ApiWorkdirsIdChatsRoute
   ApiWorkdirsIdDownloadRoute: typeof ApiWorkdirsIdDownloadRoute
   ApiWorkdirsIdManifestRoute: typeof ApiWorkdirsIdManifestRoute
+  ApiWorkdirsIdUploadRoute: typeof ApiWorkdirsIdUploadRoute
 }
 
 const ApiWorkdirsIdRouteChildren: ApiWorkdirsIdRouteChildren = {
   ApiWorkdirsIdChatsRoute: ApiWorkdirsIdChatsRoute,
   ApiWorkdirsIdDownloadRoute: ApiWorkdirsIdDownloadRoute,
   ApiWorkdirsIdManifestRoute: ApiWorkdirsIdManifestRoute,
+  ApiWorkdirsIdUploadRoute: ApiWorkdirsIdUploadRoute,
 }
 
 const ApiWorkdirsIdRouteWithChildren = ApiWorkdirsIdRoute._addFileChildren(
