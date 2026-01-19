@@ -1,0 +1,47 @@
+# Dependencies
+node_modules/
+
+# Build output (rebuilt in container)
+.output/
+dist/
+
+# Development files
+.git/
+.gitignore
+*.md
+!README.md
+
+# IDE and editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files (should be injected at runtime)
+.env
+.env.*
+!.env.example
+
+# Test files
+**/__tests__/
+**/*.test.ts
+**/*.spec.ts
+coverage/
+
+# Beans issue tracker
+.beans/
+
+# Documentation
+docs/
+agent/
+
+# Scripts
+scripts/
+
+# Temporary files
+*.log
+*.tmp

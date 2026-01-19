@@ -1,11 +1,11 @@
 ---
 # amalgam-iv73
 title: Dockerfile and deployment config
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-01-19T10:54:15Z
-updated_at: 2026-01-19T10:54:15Z
+updated_at: 2026-01-19T18:33:40Z
 parent: amalgam-u0rf
 ---
 
