@@ -395,13 +395,17 @@ setInterval(() => {
 
 ### ACP Protocol Integration
 
-> **TODO**: Add ACP protocol details once documentation is provided.
-> 
-> Expected integration points:
-> - Sending user messages to OpenCode
-> - Receiving streamed output from OpenCode
-> - Handling tool calls and confirmations
-> - Session persistence/resumption
+> **Documentation**: See `docs/acp/` for full protocol specification.
+
+Key integration points (refer to `docs/acp/protocol/` for details):
+
+- **Session Setup** (`session-setup.md`): Initialize ACP session with OpenCode
+- **Prompt Turn** (`prompt-turn.md`): Sending user messages and receiving responses
+- **Tool Calls** (`tool-calls.md`): Handling tool execution and confirmations
+- **Content** (`content.md`): Message content types and streaming
+- **Transports** (`transports.md`): stdio transport for process communication
+
+TypeScript client library available: see `docs/acp/libraries/typescript.md`
 
 ---
 
@@ -660,7 +664,7 @@ amalgam/
 
 ## Open Questions
 
-1. **ACP Protocol Details** - Awaiting documentation
+1. ~~**ACP Protocol Details**~~ - ✅ Resolved: See `docs/acp/`
 2. **Multi-tab handling** - Should we use BroadcastChannel to prevent conflicts?
 3. **Large workdir limits** - What's the max size before we warn/block?
 4. **Git integration** - Should we respect `.gitignore` automatically?
