@@ -1,10 +1,11 @@
 ---
 # amalgam-skzh
 title: Add option to show native browser context menu
-status: todo
+status: completed
 type: task
+priority: normal
 created_at: 2026-01-19T19:37:18Z
-updated_at: 2026-01-19T19:37:18Z
+updated_at: 2026-01-19T19:54:24Z
 ---
 
-Add a menu item or keyboard shortcut in the custom context menu to reveal the native browser context menu. This allows users to access browser features like 'Inspect Element', 'Copy', etc. Investigate if this is technically possible - may need to show instructions like 'Hold Shift + Right-click for browser menu' instead.
+Implemented Shift+Right-click to show native browser context menu. Modified ContextMenuTrigger component in context-menu.tsx to detect Shift key and temporarily disable the custom menu. Added hints ('Shift+Right-click for browser menu') to both sidebar chat item and chat header context menus.

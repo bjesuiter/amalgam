@@ -11,10 +11,30 @@ function ContextMenu({
 }
 
 function ContextMenuTrigger({
+  onContextMenu,
   ...props
 }: React.ComponentProps<typeof ContextMenuPrimitive.Trigger>) {
+  const [disabled, setDisabled] = React.useState(false)
+  
+  const handleContextMenu = React.useCallback(
+    (e: React.MouseEvent<HTMLSpanElement>) => {
+      if (e.shiftKey) {
+        setDisabled(true)
+        setTimeout(() => setDisabled(false), 100)
+        return
+      }
+      onContextMenu?.(e)
+    },
+    [onContextMenu]
+  )
+  
   return (
-    <ContextMenuPrimitive.Trigger data-slot="context-menu-trigger" {...props} />
+    <ContextMenuPrimitive.Trigger
+      data-slot="context-menu-trigger"
+      disabled={disabled}
+      onContextMenu={handleContextMenu}
+      {...props}
+    />
   )
 }
 

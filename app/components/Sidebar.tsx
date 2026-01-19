@@ -7,6 +7,7 @@ import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
+  ContextMenuSeparator,
   ContextMenuTrigger,
 } from '~/components/ui/context-menu'
 import { useState, useRef } from 'react'
@@ -201,6 +202,10 @@ export function Sidebar({ workdirs, chats, className, isOpen = false, onClose, o
                         <Pencil className="mr-2 h-4 w-4" />
                         Rename
                       </ContextMenuItem>
+                      <ContextMenuSeparator />
+                      <p className="px-2 py-1.5 text-xs text-muted-foreground">
+                        Shift+Right-click for browser menu
+                      </p>
                     </ContextMenuContent>
                   </ContextMenu>
                 )

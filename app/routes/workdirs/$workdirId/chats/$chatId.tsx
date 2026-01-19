@@ -14,6 +14,7 @@ import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
+  ContextMenuSeparator,
   ContextMenuTrigger,
 } from '~/components/ui/context-menu'
 import { useSyncCheck, type SyncCheckResult } from '~/lib/useSyncCheck'
@@ -494,6 +495,10 @@ function ChatPage() {
                       <Pencil className="mr-2 h-4 w-4" />
                       Rename
                     </ContextMenuItem>
+                    <ContextMenuSeparator />
+                    <p className="px-2 py-1.5 text-xs text-muted-foreground">
+                      Shift+Right-click for browser menu
+                    </p>
                   </ContextMenuContent>
                 </ContextMenu>
               )}
