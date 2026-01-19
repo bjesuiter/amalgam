@@ -1,11 +1,11 @@
 ---
 # amalgam-1fsf
 title: Workdir CRUD API routes
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-01-19T10:52:26Z
-updated_at: 2026-01-19T10:52:26Z
+updated_at: 2026-01-19T11:53:14Z
 parent: amalgam-2k5g
 ---
 

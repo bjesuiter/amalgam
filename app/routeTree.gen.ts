@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as WorkdirsIndexRouteImport } from './routes/workdirs/index'
+import { Route as ApiWorkdirsRouteImport } from './routes/api/workdirs'
 import { Route as WorkdirsWorkdirIdIndexRouteImport } from './routes/workdirs/$workdirId/index'
+import { Route as ApiWorkdirsIdRouteImport } from './routes/api/workdirs.$id'
 import { Route as WorkdirsWorkdirIdChatsChatIdRouteImport } from './routes/workdirs/$workdirId/chats/$chatId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -24,10 +26,20 @@ const WorkdirsIndexRoute = WorkdirsIndexRouteImport.update({
   path: '/workdirs/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiWorkdirsRoute = ApiWorkdirsRouteImport.update({
+  id: '/api/workdirs',
+  path: '/api/workdirs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WorkdirsWorkdirIdIndexRoute = WorkdirsWorkdirIdIndexRouteImport.update({
   id: '/workdirs/$workdirId/',
   path: '/workdirs/$workdirId/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ApiWorkdirsIdRoute = ApiWorkdirsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiWorkdirsRoute,
 } as any)
 const WorkdirsWorkdirIdChatsChatIdRoute =
   WorkdirsWorkdirIdChatsChatIdRouteImport.update({
@@ -38,20 +50,26 @@ const WorkdirsWorkdirIdChatsChatIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/workdirs': typeof ApiWorkdirsRouteWithChildren
   '/workdirs/': typeof WorkdirsIndexRoute
+  '/api/workdirs/$id': typeof ApiWorkdirsIdRoute
   '/workdirs/$workdirId/': typeof WorkdirsWorkdirIdIndexRoute
   '/workdirs/$workdirId/chats/$chatId': typeof WorkdirsWorkdirIdChatsChatIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/workdirs': typeof ApiWorkdirsRouteWithChildren
   '/workdirs': typeof WorkdirsIndexRoute
+  '/api/workdirs/$id': typeof ApiWorkdirsIdRoute
   '/workdirs/$workdirId': typeof WorkdirsWorkdirIdIndexRoute
   '/workdirs/$workdirId/chats/$chatId': typeof WorkdirsWorkdirIdChatsChatIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/workdirs': typeof ApiWorkdirsRouteWithChildren
   '/workdirs/': typeof WorkdirsIndexRoute
+  '/api/workdirs/$id': typeof ApiWorkdirsIdRoute
   '/workdirs/$workdirId/': typeof WorkdirsWorkdirIdIndexRoute
   '/workdirs/$workdirId/chats/$chatId': typeof WorkdirsWorkdirIdChatsChatIdRoute
 }
@@ -59,25 +77,32 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/api/workdirs'
     | '/workdirs/'
+    | '/api/workdirs/$id'
     | '/workdirs/$workdirId/'
     | '/workdirs/$workdirId/chats/$chatId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/api/workdirs'
     | '/workdirs'
+    | '/api/workdirs/$id'
     | '/workdirs/$workdirId'
     | '/workdirs/$workdirId/chats/$chatId'
   id:
     | '__root__'
     | '/'
+    | '/api/workdirs'
     | '/workdirs/'
+    | '/api/workdirs/$id'
     | '/workdirs/$workdirId/'
     | '/workdirs/$workdirId/chats/$chatId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiWorkdirsRoute: typeof ApiWorkdirsRouteWithChildren
   WorkdirsIndexRoute: typeof WorkdirsIndexRoute
   WorkdirsWorkdirIdIndexRoute: typeof WorkdirsWorkdirIdIndexRoute
   WorkdirsWorkdirIdChatsChatIdRoute: typeof WorkdirsWorkdirIdChatsChatIdRoute
@@ -99,12 +124,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkdirsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/workdirs': {
+      id: '/api/workdirs'
+      path: '/api/workdirs'
+      fullPath: '/api/workdirs'
+      preLoaderRoute: typeof ApiWorkdirsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/workdirs/$workdirId/': {
       id: '/workdirs/$workdirId/'
       path: '/workdirs/$workdirId'
       fullPath: '/workdirs/$workdirId/'
       preLoaderRoute: typeof WorkdirsWorkdirIdIndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/api/workdirs/$id': {
+      id: '/api/workdirs/$id'
+      path: '/$id'
+      fullPath: '/api/workdirs/$id'
+      preLoaderRoute: typeof ApiWorkdirsIdRouteImport
+      parentRoute: typeof ApiWorkdirsRoute
     }
     '/workdirs/$workdirId/chats/$chatId': {
       id: '/workdirs/$workdirId/chats/$chatId'
@@ -116,8 +155,21 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface ApiWorkdirsRouteChildren {
+  ApiWorkdirsIdRoute: typeof ApiWorkdirsIdRoute
+}
+
+const ApiWorkdirsRouteChildren: ApiWorkdirsRouteChildren = {
+  ApiWorkdirsIdRoute: ApiWorkdirsIdRoute,
+}
+
+const ApiWorkdirsRouteWithChildren = ApiWorkdirsRoute._addFileChildren(
+  ApiWorkdirsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiWorkdirsRoute: ApiWorkdirsRouteWithChildren,
   WorkdirsIndexRoute: WorkdirsIndexRoute,
   WorkdirsWorkdirIdIndexRoute: WorkdirsWorkdirIdIndexRoute,
   WorkdirsWorkdirIdChatsChatIdRoute: WorkdirsWorkdirIdChatsChatIdRoute,
