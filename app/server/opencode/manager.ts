@@ -49,7 +49,7 @@ export function startSession(chatId: string, workdir: string): OpenCodeSession {
 
   const now = new Date()
 
-  const process = spawn('opencode', ['--acp'], {
+  const process = spawn('opencode', ['acp'], {
     cwd: workdir,
     stdio: ['pipe', 'pipe', 'pipe'],
   })
