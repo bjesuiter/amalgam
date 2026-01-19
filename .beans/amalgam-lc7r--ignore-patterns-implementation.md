@@ -1,11 +1,11 @@
 ---
 # amalgam-lc7r
 title: Ignore patterns implementation
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-01-19T10:52:49Z
-updated_at: 2026-01-19T10:52:49Z
+updated_at: 2026-01-19T11:55:14Z
 parent: amalgam-azfj
 ---
 
