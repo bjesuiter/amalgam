@@ -21,15 +21,23 @@ async function upsertUser(userId: string, email: string): Promise<void> {
   }
 }
 
+const DEV_USER_ID = 'dev-user-local'
+const DEV_EMAIL = 'dev@localhost'
+
 export const authMiddleware = createMiddleware().server(async ({ request, next }) => {
-  const userId = request.headers.get('X-ExeDev-UserID')
-  const email = request.headers.get('X-ExeDev-Email')
+  let userId = request.headers.get('X-ExeDev-UserID')
+  let email = request.headers.get('X-ExeDev-Email')
 
   if (!userId || !email) {
-    return new Response(null, {
-      status: 302,
-      headers: { Location: '/__exe.dev/login?redirect=' + encodeURIComponent(request.url) },
-    })
+    if (process.env.NODE_ENV === 'development' || import.meta.env.DEV) {
+      userId = DEV_USER_ID
+      email = DEV_EMAIL
+    } else {
+      return new Response(null, {
+        status: 302,
+        headers: { Location: '/__exe.dev/login?redirect=' + encodeURIComponent(request.url) },
+      })
+    }
   }
 
   await upsertUser(userId, email)
