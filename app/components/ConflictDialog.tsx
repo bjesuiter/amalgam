@@ -54,7 +54,7 @@ export function ConflictDialog({
   return (
     <dialog
       ref={dialogRef}
-      className="w-full max-w-lg rounded-lg border bg-background p-0 shadow-lg backdrop:bg-black/50"
+      className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg rounded-lg border bg-background p-0 shadow-lg backdrop:bg-black/50"
     >
       <div className="p-6">
         <div className="mb-4 flex items-start justify-between">
