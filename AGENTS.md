@@ -48,5 +48,7 @@ You're done when all tickets are implemented.
 ## Integration Testing Ralph-Loop 
 Now look at the served website at http://localhost:3000 via playwrigher. 
 Test every ticket in beans, which is marked as done and validate it as a user would. 
-If the test works, add this result to the ticket. 
-If it does not, create a new ticket in beans as a bug for later inspection and go on to test the next ticket.
+If the test works, add this result to the ticket and mark it as "ai verified".
+If it does not, create a new ticket in beans as a bug for later inspection, 
+mark the ticket as "broken" and store the followup inspection ticket as a link, then go on to test the next ticket.
+You're done if every ticket which is currently marked as done is marked as "ai verified" or "broken".
