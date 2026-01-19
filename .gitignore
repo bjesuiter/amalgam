@@ -39,3 +39,6 @@ npm-debug.log*
 coverage/
 
 .ruff_cache
+
+# Folder for local test workspaces
+local
