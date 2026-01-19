@@ -1,0 +1,8 @@
+{
+  "name": "amalgam",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "scrape:tanstack-start": "uv run --with crawl4ai python scripts/scrape_tanstack_start_docs.py"
+  }
+}
