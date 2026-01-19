@@ -10,33 +10,77 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as WorkdirsIndexRouteImport } from './routes/workdirs/index'
+import { Route as WorkdirsWorkdirIdIndexRouteImport } from './routes/workdirs/$workdirId/index'
+import { Route as WorkdirsWorkdirIdChatsChatIdRouteImport } from './routes/workdirs/$workdirId/chats/$chatId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WorkdirsIndexRoute = WorkdirsIndexRouteImport.update({
+  id: '/workdirs/',
+  path: '/workdirs/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WorkdirsWorkdirIdIndexRoute = WorkdirsWorkdirIdIndexRouteImport.update({
+  id: '/workdirs/$workdirId/',
+  path: '/workdirs/$workdirId/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WorkdirsWorkdirIdChatsChatIdRoute =
+  WorkdirsWorkdirIdChatsChatIdRouteImport.update({
+    id: '/workdirs/$workdirId/chats/$chatId',
+    path: '/workdirs/$workdirId/chats/$chatId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/workdirs/': typeof WorkdirsIndexRoute
+  '/workdirs/$workdirId/': typeof WorkdirsWorkdirIdIndexRoute
+  '/workdirs/$workdirId/chats/$chatId': typeof WorkdirsWorkdirIdChatsChatIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/workdirs': typeof WorkdirsIndexRoute
+  '/workdirs/$workdirId': typeof WorkdirsWorkdirIdIndexRoute
+  '/workdirs/$workdirId/chats/$chatId': typeof WorkdirsWorkdirIdChatsChatIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/workdirs/': typeof WorkdirsIndexRoute
+  '/workdirs/$workdirId/': typeof WorkdirsWorkdirIdIndexRoute
+  '/workdirs/$workdirId/chats/$chatId': typeof WorkdirsWorkdirIdChatsChatIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/workdirs/'
+    | '/workdirs/$workdirId/'
+    | '/workdirs/$workdirId/chats/$chatId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/workdirs'
+    | '/workdirs/$workdirId'
+    | '/workdirs/$workdirId/chats/$chatId'
+  id:
+    | '__root__'
+    | '/'
+    | '/workdirs/'
+    | '/workdirs/$workdirId/'
+    | '/workdirs/$workdirId/chats/$chatId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  WorkdirsIndexRoute: typeof WorkdirsIndexRoute
+  WorkdirsWorkdirIdIndexRoute: typeof WorkdirsWorkdirIdIndexRoute
+  WorkdirsWorkdirIdChatsChatIdRoute: typeof WorkdirsWorkdirIdChatsChatIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +92,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/workdirs/': {
+      id: '/workdirs/'
+      path: '/workdirs'
+      fullPath: '/workdirs/'
+      preLoaderRoute: typeof WorkdirsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/workdirs/$workdirId/': {
+      id: '/workdirs/$workdirId/'
+      path: '/workdirs/$workdirId'
+      fullPath: '/workdirs/$workdirId/'
+      preLoaderRoute: typeof WorkdirsWorkdirIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/workdirs/$workdirId/chats/$chatId': {
+      id: '/workdirs/$workdirId/chats/$chatId'
+      path: '/workdirs/$workdirId/chats/$chatId'
+      fullPath: '/workdirs/$workdirId/chats/$chatId'
+      preLoaderRoute: typeof WorkdirsWorkdirIdChatsChatIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  WorkdirsIndexRoute: WorkdirsIndexRoute,
+  WorkdirsWorkdirIdIndexRoute: WorkdirsWorkdirIdIndexRoute,
+  WorkdirsWorkdirIdChatsChatIdRoute: WorkdirsWorkdirIdChatsChatIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

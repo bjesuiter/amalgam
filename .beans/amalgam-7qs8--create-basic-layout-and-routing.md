@@ -1,11 +1,11 @@
 ---
 # amalgam-7qs8
 title: Create basic layout and routing
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-01-19T10:51:58Z
-updated_at: 2026-01-19T10:51:58Z
+updated_at: 2026-01-19T11:46:35Z
 parent: amalgam-5gne
 ---
 
