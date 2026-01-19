@@ -46,3 +46,5 @@ local
 # Folder for the "server" dir for testing
 data/*
 !data/.gitkeep
+
+tmp
