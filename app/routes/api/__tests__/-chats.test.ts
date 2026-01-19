@@ -53,7 +53,7 @@ async function createTestWorkdir(workdirId: string, userId: string, name: string
     id: workdirId,
     userId,
     name,
-    remotePath: `/home/exedev/${userId}/${name}`,
+    remotePath: `./data/${userId}/workdirs/${name}`,
     createdAt: new Date(),
   })
 }

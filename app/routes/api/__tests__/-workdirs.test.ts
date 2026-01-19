@@ -63,14 +63,14 @@ describe('GET /api/workdirs', () => {
         id: 'workdir-1',
         userId: user1Id,
         name: 'project-1',
-        remotePath: `/home/exedev/${user1Id}/project-1`,
+        remotePath: `./data/${user1Id}/workdirs/project-1`,
         createdAt: new Date(),
       },
       {
         id: 'workdir-2',
         userId: user2Id,
         name: 'project-2',
-        remotePath: `/home/exedev/${user2Id}/project-2`,
+        remotePath: `./data/${user2Id}/workdirs/project-2`,
         createdAt: new Date(),
       },
     ])
@@ -92,7 +92,7 @@ describe('POST /api/workdirs', () => {
     await createTestUser(userId, 'create@example.com')
 
     const workdirId = crypto.randomUUID()
-    const remotePath = `/home/exedev/${userId}/${workdirName}`
+    const remotePath = `./data/${userId}/workdirs/${workdirName}`
     const now = new Date()
 
     await testDb.insert(schema.workdirs).values({
@@ -123,7 +123,7 @@ describe('POST /api/workdirs', () => {
       id: workdirId,
       userId,
       name: 'sync-project',
-      remotePath: `/home/exedev/${userId}/sync-project`,
+      remotePath: `./data/${userId}/workdirs/sync-project`,
       createdAt: new Date(),
     })
 
@@ -146,7 +146,7 @@ describe('DELETE /api/workdirs/:id', () => {
       id: workdirId,
       userId,
       name: 'delete-me',
-      remotePath: `/home/exedev/${userId}/delete-me`,
+      remotePath: `./data/${userId}/workdirs/delete-me`,
       createdAt: new Date(),
     })
 
@@ -173,7 +173,7 @@ describe('DELETE /api/workdirs/:id', () => {
       id: workdirId,
       userId: user1Id,
       name: 'protected',
-      remotePath: `/home/exedev/${user1Id}/protected`,
+      remotePath: `./data/${user1Id}/workdirs/protected`,
       createdAt: new Date(),
     })
 

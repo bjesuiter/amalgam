@@ -37,7 +37,7 @@ export const Route = createFileRoute('/api/workdirs')({
         }
         
         const workdirId = crypto.randomUUID()
-        const remotePath = `/home/exedev/${userId}/${body.name}`
+        const remotePath = `./data/${userId}/workdirs/${body.name}`
         const now = new Date()
         
         await db.insert(schema.workdirs).values({
