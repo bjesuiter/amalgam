@@ -3,6 +3,7 @@
 ## Project Conventions
 
 - **Package Manager**: bun (use `bun` instead of `npm` or `pnpm`)
+- **Beans**: After creating or updating beans, always commit and push the bean file(s)
 
 ## Documentation References
 
