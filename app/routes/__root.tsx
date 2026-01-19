@@ -6,8 +6,11 @@ import {
   HeadContent,
   Scripts,
 } from '@tanstack/react-router'
+import { useEffect } from 'react'
 import globalsCss from '~/styles/globals.css?url'
 import { Toaster } from '~/components/ui/sonner'
+import { OfflineIndicator } from '~/components/OfflineIndicator'
+import { registerServiceWorker } from '~/lib/registerSW'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -54,6 +57,10 @@ export const Route = createRootRoute({
 })
 
 function RootComponent() {
+  useEffect(() => {
+    registerServiceWorker()
+  }, [])
+
   return (
     <RootDocument>
       <Outlet />
@@ -70,6 +77,7 @@ function RootDocument({ children }: Readonly<{ children: ReactNode }>) {
       <body>
         {children}
         <Toaster />
+        <OfflineIndicator />
         <Scripts />
       </body>
     </html>

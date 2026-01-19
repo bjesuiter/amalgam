@@ -1,11 +1,11 @@
 ---
 # amalgam-3pb5
 title: Service worker for offline shell
-status: todo
+status: completed
 type: task
 priority: low
 created_at: 2026-01-19T10:54:11Z
-updated_at: 2026-01-19T10:54:11Z
+updated_at: 2026-01-19T18:57:20Z
 parent: amalgam-u0rf
 ---
 
