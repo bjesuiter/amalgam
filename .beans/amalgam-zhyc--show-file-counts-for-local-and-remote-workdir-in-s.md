@@ -1,11 +1,11 @@
 ---
 # amalgam-zhyc
 title: Show file counts for local and remote workdir in Sync Status
-status: todo
+status: completed
 type: feature
 priority: high
 created_at: 2026-01-19T14:45:43Z
-updated_at: 2026-01-19T14:45:43Z
+updated_at: 2026-01-19T16:03:02Z
 ---
 
 Enhance Sync Status card to show two columns:

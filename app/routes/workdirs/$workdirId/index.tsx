@@ -4,7 +4,7 @@ import { Layout } from '~/components/Layout'
 import { Button } from '~/components/ui/button'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '~/components/ui/card'
 import { ConfirmDialog } from '~/components/ConfirmDialog'
-import { FolderSync, MessageSquare, Plus, Trash2, FolderOpen, Link2 } from 'lucide-react'
+import { FolderSync, MessageSquare, Plus, Trash2, Link2 } from 'lucide-react'
 import { removeWorkdirHandle, getWorkdirHandle, storeWorkdirHandle } from '~/lib/fs-storage'
 import { selectDirectory } from '~/lib/fs-api'
 import { SyncControls } from '~/components/SyncControls'
@@ -194,19 +194,18 @@ function WorkdirDetailPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="flex items-center gap-2 text-sm">
-                <FolderOpen className="h-4 w-4 text-muted-foreground" />
-                {localFolderName ? (
-                  <span className="text-foreground">{localFolderName}</span>
-                ) : (
-                  <span className="text-muted-foreground">No folder linked</span>
-                )}
-                <Button variant="ghost" size="sm" onClick={handleLinkFolder} className="ml-auto">
+              <SyncControls
+                workdirId={workdirId}
+                workdirName={workdir.name}
+                localFolderName={localFolderName}
+                onSyncComplete={fetchData}
+              />
+              <div className="flex justify-center">
+                <Button variant="ghost" size="sm" onClick={handleLinkFolder}>
                   <Link2 className="mr-1 h-3 w-3" />
-                  {localFolderName ? 'Change' : 'Link Folder'}
+                  {localFolderName ? 'Change Local Folder' : 'Link Local Folder'}
                 </Button>
               </div>
-              <SyncControls workdirId={workdirId} onSyncComplete={fetchData} />
             </CardContent>
           </Card>
 
