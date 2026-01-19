@@ -1,11 +1,11 @@
 ---
 # amalgam-t10a
 title: IndexedDB storage for directory handles
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-01-19T10:52:22Z
-updated_at: 2026-01-19T10:52:22Z
+updated_at: 2026-01-19T12:09:36Z
 parent: amalgam-2k5g
 ---
 
