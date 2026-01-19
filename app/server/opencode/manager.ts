@@ -1,8 +1,8 @@
 import { spawn, type ChildProcess } from 'child_process'
 
-/**
- * Represents an active OpenCode session linked to a chat
- */
+const SESSION_TIMEOUT_MS = parseInt(process.env.SESSION_TIMEOUT_MS || String(30 * 60 * 1000), 10)
+const CLEANUP_INTERVAL_MS = 60 * 1000
+
 export interface OpenCodeSession {
   chatId: string
   process: ChildProcess
@@ -16,21 +16,18 @@ export interface OpenCodeSession {
  */
 const sessions = new Map<string, OpenCodeSession>()
 
-/**
- * Callback type for session exit events
- */
 export type SessionExitCallback = (chatId: string, code: number | null, signal: NodeJS.Signals | null) => void
+export type SessionTimeoutCallback = (chatId: string) => void
 
-/**
- * Optional callback invoked when a session process exits
- */
 let onSessionExit: SessionExitCallback | undefined
+let onSessionTimeout: SessionTimeoutCallback | undefined
 
-/**
- * Set a callback to be invoked when any session exits
- */
 export function setSessionExitCallback(callback: SessionExitCallback | undefined): void {
   onSessionExit = callback
+}
+
+export function setSessionTimeoutCallback(callback: SessionTimeoutCallback | undefined): void {
+  onSessionTimeout = callback
 }
 
 /**
@@ -129,10 +126,38 @@ export function getAllSessions(): OpenCodeSession[] {
   return Array.from(sessions.values())
 }
 
-/**
- * Clear all sessions (mainly for testing).
- * Does NOT kill processes - use stopSession for that.
- */
 export function clearSessionsMap(): void {
   sessions.clear()
+}
+
+function cleanupTimedOutSessions(): void {
+  const now = Date.now()
+  for (const [chatId, session] of sessions) {
+    if (now - session.lastActivityAt.getTime() > SESSION_TIMEOUT_MS) {
+      onSessionTimeout?.(chatId)
+      stopSession(chatId)
+    }
+  }
+}
+
+let cleanupIntervalId: ReturnType<typeof setInterval> | null = null
+
+export function startSessionCleanup(): void {
+  if (cleanupIntervalId) return
+  cleanupIntervalId = setInterval(cleanupTimedOutSessions, CLEANUP_INTERVAL_MS)
+}
+
+export function stopSessionCleanup(): void {
+  if (cleanupIntervalId) {
+    clearInterval(cleanupIntervalId)
+    cleanupIntervalId = null
+  }
+}
+
+export function getSessionTimeoutMs(): number {
+  return SESSION_TIMEOUT_MS
+}
+
+export function getCleanupIntervalMs(): number {
+  return CLEANUP_INTERVAL_MS
 }

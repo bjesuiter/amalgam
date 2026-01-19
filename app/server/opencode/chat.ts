@@ -1,5 +1,12 @@
 import { EventEmitter } from 'events'
-import { startSession, stopSession, getSession, updateSessionActivity } from './manager'
+import {
+  startSession,
+  stopSession,
+  getSession,
+  updateSessionActivity,
+  setSessionTimeoutCallback,
+  startSessionCleanup,
+} from './manager'
 import { ACPClient, createACPClient, type SessionUpdate } from './acp'
 
 export interface ChatConnection {
@@ -10,7 +17,7 @@ export interface ChatConnection {
   status: 'idle' | 'running' | 'error'
 }
 
-export type ChatEventType = 'output' | 'status' | 'error'
+export type ChatEventType = 'output' | 'status' | 'error' | 'timeout'
 
 export interface ChatOutputEvent {
   type: 'output'
@@ -27,10 +34,23 @@ export interface ChatErrorEvent {
   message: string
 }
 
-export type ChatEvent = ChatOutputEvent | ChatStatusEvent | ChatErrorEvent
+export interface ChatTimeoutEvent {
+  type: 'timeout'
+  message: string
+}
+
+export type ChatEvent = ChatOutputEvent | ChatStatusEvent | ChatErrorEvent | ChatTimeoutEvent
 
 const connections = new Map<string, ChatConnection>()
 const eventEmitters = new Map<string, EventEmitter>()
+
+setSessionTimeoutCallback((chatId: string) => {
+  emitChatEvent(chatId, { type: 'timeout', message: 'Session timed out due to inactivity' })
+  emitChatEvent(chatId, { type: 'status', status: 'idle' })
+  connections.delete(chatId)
+})
+
+startSessionCleanup()
 
 export function getEventEmitter(chatId: string): EventEmitter {
   let emitter = eventEmitters.get(chatId)

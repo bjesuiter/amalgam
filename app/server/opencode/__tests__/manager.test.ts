@@ -9,6 +9,11 @@ import {
   getAllSessions,
   clearSessionsMap,
   setSessionExitCallback,
+  setSessionTimeoutCallback,
+  startSessionCleanup,
+  stopSessionCleanup,
+  getSessionTimeoutMs,
+  getCleanupIntervalMs,
   type OpenCodeSession,
 } from '../manager'
 
@@ -33,10 +38,13 @@ beforeEach(() => {
   spawnSpy = spyOn(childProcess, 'spawn').mockReturnValue(mockProcess as unknown as childProcess.ChildProcess)
   clearSessionsMap()
   setSessionExitCallback(undefined)
+  setSessionTimeoutCallback(undefined)
+  stopSessionCleanup()
 })
 
 afterEach(() => {
   spawnSpy.mockRestore()
+  stopSessionCleanup()
 })
 
 describe('OpenCode Process Manager', () => {
@@ -51,10 +59,10 @@ describe('OpenCode Process Manager', () => {
       expect(getSession('chat-1')).toBe(session)
     })
 
-    test('spawns opencode with --acp flag and correct cwd', () => {
+    test('spawns opencode with acp subcommand and correct cwd', () => {
       startSession('chat-1', '/my/project')
 
-      expect(spawnSpy).toHaveBeenCalledWith('opencode', ['--acp'], {
+      expect(spawnSpy).toHaveBeenCalledWith('opencode', ['acp'], {
         cwd: '/my/project',
         stdio: ['pipe', 'pipe', 'pipe'],
       })
@@ -195,6 +203,80 @@ describe('OpenCode Process Manager', () => {
 
       expect(getAllSessions()).toEqual([])
       expect(mockProcess.killed).toBe(false)
+    })
+  })
+
+  describe('session timeout', () => {
+    test('getSessionTimeoutMs returns configured timeout', () => {
+      const timeout = getSessionTimeoutMs()
+      expect(timeout).toBeGreaterThan(0)
+    })
+
+    test('getCleanupIntervalMs returns 60 seconds', () => {
+      expect(getCleanupIntervalMs()).toBe(60 * 1000)
+    })
+
+    test('timeout callback is invoked when session is inactive', async () => {
+      const timeoutCallback = mock(() => {})
+      setSessionTimeoutCallback(timeoutCallback)
+
+      const session = startSession('chat-1', '/tmp/workdir')
+      session.lastActivityAt = new Date(Date.now() - getSessionTimeoutMs() - 1000)
+
+      const captured: { fn: (() => void) | null } = { fn: null }
+      const originalSetInterval = globalThis.setInterval
+      ;(globalThis as unknown as { setInterval: typeof setInterval }).setInterval = ((fn: () => void) => {
+        captured.fn = fn
+        return 999
+      }) as unknown as typeof setInterval
+
+      startSessionCleanup()
+      captured.fn?.()
+
+      ;(globalThis as unknown as { setInterval: typeof setInterval }).setInterval = originalSetInterval
+
+      expect(timeoutCallback).toHaveBeenCalledWith('chat-1')
+      expect(getSession('chat-1')).toBeUndefined()
+    })
+
+    test('session is not timed out when recently active', () => {
+      const timeoutCallback = mock(() => {})
+      setSessionTimeoutCallback(timeoutCallback)
+
+      startSession('chat-1', '/tmp/workdir')
+      updateSessionActivity('chat-1')
+
+      const captured: { fn: (() => void) | null } = { fn: null }
+      const originalSetInterval = globalThis.setInterval
+      ;(globalThis as unknown as { setInterval: typeof setInterval }).setInterval = ((fn: () => void) => {
+        captured.fn = fn
+        return 999
+      }) as unknown as typeof setInterval
+
+      startSessionCleanup()
+      captured.fn?.()
+
+      ;(globalThis as unknown as { setInterval: typeof setInterval }).setInterval = originalSetInterval
+
+      expect(timeoutCallback).not.toHaveBeenCalled()
+      expect(getSession('chat-1')).toBeDefined()
+    })
+
+    test('startSessionCleanup only starts one interval', () => {
+      const originalSetInterval = globalThis.setInterval
+      let callCount = 0
+      ;(globalThis as unknown as { setInterval: typeof setInterval }).setInterval = (() => {
+        callCount++
+        return 999
+      }) as unknown as typeof setInterval
+
+      startSessionCleanup()
+      startSessionCleanup()
+      startSessionCleanup()
+
+      ;(globalThis as unknown as { setInterval: typeof setInterval }).setInterval = originalSetInterval
+
+      expect(callCount).toBe(1)
     })
   })
 })

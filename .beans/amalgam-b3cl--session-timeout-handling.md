@@ -1,11 +1,11 @@
 ---
 # amalgam-b3cl
 title: Session timeout handling
-status: todo
+status: completed
 type: task
 priority: normal
 created_at: 2026-01-19T10:53:47Z
-updated_at: 2026-01-19T10:53:47Z
+updated_at: 2026-01-19T18:40:16Z
 parent: amalgam-7u0f
 ---
 
