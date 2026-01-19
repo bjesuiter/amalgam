@@ -1,11 +1,11 @@
 ---
 # amalgam-mptv
 title: Remote manifest API
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-01-19T10:52:54Z
-updated_at: 2026-01-19T10:52:54Z
+updated_at: 2026-01-19T12:01:13Z
 parent: amalgam-azfj
 ---
 

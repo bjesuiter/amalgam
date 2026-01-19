@@ -16,6 +16,7 @@ import { Route as WorkdirsWorkdirIdIndexRouteImport } from './routes/workdirs/$w
 import { Route as ApiWorkdirsIdRouteImport } from './routes/api/workdirs.$id'
 import { Route as ApiChatsIdRouteImport } from './routes/api/chats.$id'
 import { Route as WorkdirsWorkdirIdChatsChatIdRouteImport } from './routes/workdirs/$workdirId/chats/$chatId'
+import { Route as ApiWorkdirsIdManifestRouteImport } from './routes/api/workdirs.$id.manifest'
 import { Route as ApiWorkdirsIdChatsRouteImport } from './routes/api/workdirs.$id.chats'
 
 const IndexRoute = IndexRouteImport.update({
@@ -54,6 +55,11 @@ const WorkdirsWorkdirIdChatsChatIdRoute =
     path: '/workdirs/$workdirId/chats/$chatId',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiWorkdirsIdManifestRoute = ApiWorkdirsIdManifestRouteImport.update({
+  id: '/manifest',
+  path: '/manifest',
+  getParentRoute: () => ApiWorkdirsIdRoute,
+} as any)
 const ApiWorkdirsIdChatsRoute = ApiWorkdirsIdChatsRouteImport.update({
   id: '/chats',
   path: '/chats',
@@ -68,6 +74,7 @@ export interface FileRoutesByFullPath {
   '/api/workdirs/$id': typeof ApiWorkdirsIdRouteWithChildren
   '/workdirs/$workdirId/': typeof WorkdirsWorkdirIdIndexRoute
   '/api/workdirs/$id/chats': typeof ApiWorkdirsIdChatsRoute
+  '/api/workdirs/$id/manifest': typeof ApiWorkdirsIdManifestRoute
   '/workdirs/$workdirId/chats/$chatId': typeof WorkdirsWorkdirIdChatsChatIdRoute
 }
 export interface FileRoutesByTo {
@@ -78,6 +85,7 @@ export interface FileRoutesByTo {
   '/api/workdirs/$id': typeof ApiWorkdirsIdRouteWithChildren
   '/workdirs/$workdirId': typeof WorkdirsWorkdirIdIndexRoute
   '/api/workdirs/$id/chats': typeof ApiWorkdirsIdChatsRoute
+  '/api/workdirs/$id/manifest': typeof ApiWorkdirsIdManifestRoute
   '/workdirs/$workdirId/chats/$chatId': typeof WorkdirsWorkdirIdChatsChatIdRoute
 }
 export interface FileRoutesById {
@@ -89,6 +97,7 @@ export interface FileRoutesById {
   '/api/workdirs/$id': typeof ApiWorkdirsIdRouteWithChildren
   '/workdirs/$workdirId/': typeof WorkdirsWorkdirIdIndexRoute
   '/api/workdirs/$id/chats': typeof ApiWorkdirsIdChatsRoute
+  '/api/workdirs/$id/manifest': typeof ApiWorkdirsIdManifestRoute
   '/workdirs/$workdirId/chats/$chatId': typeof WorkdirsWorkdirIdChatsChatIdRoute
 }
 export interface FileRouteTypes {
@@ -101,6 +110,7 @@ export interface FileRouteTypes {
     | '/api/workdirs/$id'
     | '/workdirs/$workdirId/'
     | '/api/workdirs/$id/chats'
+    | '/api/workdirs/$id/manifest'
     | '/workdirs/$workdirId/chats/$chatId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
     | '/api/workdirs/$id'
     | '/workdirs/$workdirId'
     | '/api/workdirs/$id/chats'
+    | '/api/workdirs/$id/manifest'
     | '/workdirs/$workdirId/chats/$chatId'
   id:
     | '__root__'
@@ -121,6 +132,7 @@ export interface FileRouteTypes {
     | '/api/workdirs/$id'
     | '/workdirs/$workdirId/'
     | '/api/workdirs/$id/chats'
+    | '/api/workdirs/$id/manifest'
     | '/workdirs/$workdirId/chats/$chatId'
   fileRoutesById: FileRoutesById
 }
@@ -184,6 +196,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WorkdirsWorkdirIdChatsChatIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/workdirs/$id/manifest': {
+      id: '/api/workdirs/$id/manifest'
+      path: '/manifest'
+      fullPath: '/api/workdirs/$id/manifest'
+      preLoaderRoute: typeof ApiWorkdirsIdManifestRouteImport
+      parentRoute: typeof ApiWorkdirsIdRoute
+    }
     '/api/workdirs/$id/chats': {
       id: '/api/workdirs/$id/chats'
       path: '/chats'
@@ -196,10 +215,12 @@ declare module '@tanstack/react-router' {
 
 interface ApiWorkdirsIdRouteChildren {
   ApiWorkdirsIdChatsRoute: typeof ApiWorkdirsIdChatsRoute
+  ApiWorkdirsIdManifestRoute: typeof ApiWorkdirsIdManifestRoute
 }
 
 const ApiWorkdirsIdRouteChildren: ApiWorkdirsIdRouteChildren = {
   ApiWorkdirsIdChatsRoute: ApiWorkdirsIdChatsRoute,
+  ApiWorkdirsIdManifestRoute: ApiWorkdirsIdManifestRoute,
 }
 
 const ApiWorkdirsIdRouteWithChildren = ApiWorkdirsIdRoute._addFileChildren(
