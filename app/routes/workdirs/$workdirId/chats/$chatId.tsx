@@ -1,9 +1,12 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { Layout } from '~/components/Layout'
 import { ChatMessage, type Message } from '~/components/ChatMessage'
 import { ChatInput } from '~/components/ChatInput'
+import { Button } from '~/components/ui/button'
+import { ConfirmDialog } from '~/components/ConfirmDialog'
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { cn } from '~/lib/utils'
+import { Trash2 } from 'lucide-react'
 
 export const Route = createFileRoute('/workdirs/$workdirId/chats/$chatId')({
   component: ChatPage,
@@ -32,6 +35,7 @@ interface ChatEvent {
 
 function ChatPage() {
   const { workdirId, chatId } = Route.useParams()
+  const navigate = useNavigate()
 
   const [workdirs, setWorkdirs] = useState<Workdir[]>([])
   const [chats, setChats] = useState<Chat[]>([])
@@ -39,6 +43,8 @@ function ChatPage() {
   const [status, setStatus] = useState<ChatStatus>('connecting')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const eventSourceRef = useRef<EventSource | null>(null)
@@ -189,6 +195,21 @@ function ChatPage() {
     }
   }
 
+  const handleDelete = async () => {
+    setDeleting(true)
+    try {
+      const response = await fetch(`/api/chats/${chatId}`, { method: 'DELETE' })
+      if (!response.ok) {
+        throw new Error('Failed to delete chat')
+      }
+      navigate({ to: '/workdirs/$workdirId', params: { workdirId } })
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete chat')
+      setDeleting(false)
+      setDeleteDialogOpen(false)
+    }
+  }
+
   if (loading) {
     return (
       <Layout workdirs={[]}>
@@ -220,6 +241,13 @@ function ChatPage() {
               {status === 'connecting' && 'Connecting...'}
             </span>
           </div>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setDeleteDialogOpen(true)}
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
         </header>
 
         <div className="flex-1 overflow-y-auto p-4">
@@ -252,6 +280,17 @@ function ChatPage() {
           />
         </div>
       </div>
+
+      <ConfirmDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        title="Delete Chat"
+        description="Are you sure you want to delete this chat? This action cannot be undone."
+        confirmLabel="Delete"
+        variant="destructive"
+        loading={deleting}
+        onConfirm={handleDelete}
+      />
     </Layout>
   )
 }
