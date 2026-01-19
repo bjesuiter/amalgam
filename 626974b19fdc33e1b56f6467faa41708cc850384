@@ -1,0 +1,60 @@
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.34",
+  "base_commit_sha": "626974b19fdc33e1b56f6467faa41708cc850384",
+  "prompts": {
+    "2397586177623239": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "opencode-transcript-ses_428698dc7ffe6fDIIe5MtHWp4H-34e9bf68-a585-4cc7-8d0f-ab41878bc9fd",
+        "model": "unknown"
+      },
+      "human_author": "Benjamin Jesuiter <bjesuiter@gmail.com>",
+      "messages": [],
+      "total_additions": 37,
+      "total_deletions": 0,
+      "accepted_lines": 37,
+      "overriden_lines": 0
+    },
+    "59fa3fa5024ef2ab": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "opencode-transcript-ses_428698dc7ffe6fDIIe5MtHWp4H-593d1787-cf6c-473b-951c-33e91d05d8bd",
+        "model": "unknown"
+      },
+      "human_author": "Benjamin Jesuiter <bjesuiter@gmail.com>",
+      "messages": [],
+      "total_additions": 17,
+      "total_deletions": 0,
+      "accepted_lines": 17,
+      "overriden_lines": 0
+    },
+    "8f0a95900ab99bff": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "opencode-transcript-ses_428698dc7ffe6fDIIe5MtHWp4H-b41ef2fc-37b6-4d03-be16-a586c8e5ad5d",
+        "model": "unknown"
+      },
+      "human_author": "Benjamin Jesuiter <bjesuiter@gmail.com>",
+      "messages": [],
+      "total_additions": 17,
+      "total_deletions": 0,
+      "accepted_lines": 17,
+      "overriden_lines": 0
+    },
+    "99e96d4df97164d0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "opencode-transcript-ses_428698dc7ffe6fDIIe5MtHWp4H-1883e8e8-4f53-468b-9962-2b0ab8267f0b",
+        "model": "unknown"
+      },
+      "human_author": "Benjamin Jesuiter <bjesuiter@gmail.com>",
+      "messages": [],
+      "total_additions": 13,
+      "total_deletions": 0,
+      "accepted_lines": 13,
+      "overriden_lines": 0
+    }
+  }
+}
