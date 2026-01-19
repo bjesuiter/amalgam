@@ -4,8 +4,10 @@ title: Workdir CRUD API routes
 status: completed
 type: task
 priority: high
+tags:
+    - ai-verified
 created_at: 2026-01-19T10:52:26Z
-updated_at: 2026-01-19T11:53:14Z
+updated_at: 2026-01-19T15:13:19Z
 parent: amalgam-2k5g
 ---
 
@@ -30,3 +32,16 @@ Implement server-side API routes for workdir management.
 - Test cases: list empty, create workdir, list with items, delete workdir
 - Mock auth headers in tests
 - Verify database state after each operation
+
+## AI Verification Result (2026-01-19)
+**Status: PASSED**
+- ✅ Route files exist:
+  - app/routes/api/workdirs.ts (GET/POST)
+  - app/routes/api/workdirs.$id.ts (DELETE)
+  - app/routes/api/workdirs.$id.upload.ts
+  - app/routes/api/workdirs.$id.download.ts
+  - app/routes/api/workdirs.$id.manifest.ts
+  - app/routes/api/workdirs.$id.chats.ts
+- ✅ GET /api/workdirs returns 200 with workdirs array
+- ✅ Response contains workdir with id, userId, name, remotePath, createdAt, lastSyncedAt
+- ✅ UI successfully loads workdirs from API (visible in workdir list)

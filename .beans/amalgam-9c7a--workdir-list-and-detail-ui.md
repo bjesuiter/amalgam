@@ -4,8 +4,10 @@ title: Workdir list and detail UI
 status: completed
 type: task
 priority: high
+tags:
+    - ai-verified
 created_at: 2026-01-19T10:52:29Z
-updated_at: 2026-01-19T12:14:42Z
+updated_at: 2026-01-19T15:11:37Z
 parent: amalgam-2k5g
 ---
 
@@ -35,3 +37,19 @@ Build the UI for listing and viewing workdirs.
 - Verify: clicking card navigates to detail page
 - Verify: delete confirmation dialog works
 - Write component tests with `bun:test` + testing-library if applicable
+
+## AI Verification Result (2026-01-19)
+**Status: PASSED**
+- ✅ WorkdirList component shows all workdirs at /workdirs
+- ✅ WorkdirCard shows name ("Playground") and sync date ("Never synced")
+- ✅ Clicking workdir navigates to detail page /workdirs/:id
+- ✅ WorkdirDetailPage shows:
+  - Workdir name and sync status
+  - Sync Status card with Upload/Download buttons
+  - Chats card with New Chat button
+  - Recent Chats list
+- ✅ Delete confirmation dialog:
+  - Opens when clicking trash icon
+  - Shows "Delete Workdir" heading
+  - Displays confirmation message with workdir name
+  - Has Cancel and Delete buttons
