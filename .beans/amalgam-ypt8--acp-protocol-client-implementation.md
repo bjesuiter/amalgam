@@ -1,11 +1,11 @@
 ---
 # amalgam-ypt8
 title: ACP protocol client implementation
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-01-19T10:53:29Z
-updated_at: 2026-01-19T10:53:29Z
+updated_at: 2026-01-19T14:53:35Z
 parent: amalgam-7u0f
 ---
 
