@@ -1,11 +1,11 @@
 ---
 # amalgam-98t2
 title: WebSocket endpoint for chat streaming
-status: todo
+status: completed
 type: task
 priority: high
 created_at: 2026-01-19T10:53:33Z
-updated_at: 2026-01-19T10:53:33Z
+updated_at: 2026-01-19T14:58:57Z
 parent: amalgam-7u0f
 ---
 
